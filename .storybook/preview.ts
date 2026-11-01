@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/web-components-vite'
+import '../src/tokens/index.css'
 
 const preview: Preview = {
   parameters: {

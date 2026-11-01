@@ -1,0 +1,62 @@
+/* ─── Primitive: Neutrals (warm stone, 05=darkest → 95=lightest) ── */
+:root {
+  --color-neutral-95: #fafaf9;
+  --color-neutral-90: #f5f5f4;
+  --color-neutral-80: #e7e5e4;
+  --color-neutral-70: #d6d3d1;
+  --color-neutral-60: #a8a29e;
+  --color-neutral-50: #78716c;
+  --color-neutral-40: #57534e;
+  --color-neutral-30: #44403c;
+  --color-neutral-20: #292524;
+  --color-neutral-10: #1c1917;
+  --color-neutral-05: #0c0a09;
+
+  /* ─── Primitive: Brand (warm copper/amber, 05=darkest → 95=lightest) */
+  --color-brand-95: #fef8f0;
+  --color-brand-90: #fdecd8;
+  --color-brand-80: #f9d4a8;
+  --color-brand-70: #f2b96c;
+  --color-brand-60: #e09444;
+  --color-brand-50: #c47a2b;
+  --color-brand-40: #a36322;
+  --color-brand-30: #7f4c1a;
+  --color-brand-20: #5c3512;
+  --color-brand-10: #3a210b;
+  --color-brand-05: #261506;
+
+  /* ─── Semantic ───────────────────────────────────────────────── */
+  --color-bg:                var(--color-neutral-95);
+  --color-text:              var(--color-neutral-10);
+  --color-text-subtle:       var(--color-neutral-50);
+  --color-border:            var(--color-neutral-80);
+  --color-interactive:       var(--color-brand-40);
+  --color-interactive-hover: var(--color-brand-30);
+
+  /* ─── Web Awesome overrides ──────────────────────────────────── */
+  /* Override WA's brand scale (default: blue) with our copper/amber */
+  --wa-color-brand-95: var(--color-brand-95);
+  --wa-color-brand-90: var(--color-brand-90);
+  --wa-color-brand-80: var(--color-brand-80);
+  --wa-color-brand-70: var(--color-brand-70);
+  --wa-color-brand-60: var(--color-brand-60);
+  --wa-color-brand-50: var(--color-brand-50);
+  --wa-color-brand-40: var(--color-brand-40);
+  --wa-color-brand-30: var(--color-brand-30);
+  --wa-color-brand-20: var(--color-brand-20);
+  --wa-color-brand-10: var(--color-brand-10);
+  --wa-color-brand-05: var(--color-brand-05);
+
+  /* Override WA's neutral scale (default: cool gray) with warm stone */
+  --wa-color-neutral-95: var(--color-neutral-95);
+  --wa-color-neutral-90: var(--color-neutral-90);
+  --wa-color-neutral-80: var(--color-neutral-80);
+  --wa-color-neutral-70: var(--color-neutral-70);
+  --wa-color-neutral-60: var(--color-neutral-60);
+  --wa-color-neutral-50: var(--color-neutral-50);
+  --wa-color-neutral-40: var(--color-neutral-40);
+  --wa-color-neutral-30: var(--color-neutral-30);
+  --wa-color-neutral-20: var(--color-neutral-20);
+  --wa-color-neutral-10: var(--color-neutral-10);
+  --wa-color-neutral-05: var(--color-neutral-05);
+}
