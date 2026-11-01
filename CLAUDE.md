@@ -23,12 +23,19 @@ It replicates the design-to-code workflow from my "Design to Code" case study, u
 - No italic or serif type styles.
 
 ## Build order
-1. Tokens (color, type, spacing)
-2. Button
-3. Input
-4. Badge
-5. Card
-6. Component status tracker page
+1. ✅ Tokens (color, type, spacing)
+2. ✅ Motion tokens (duration, easing)
+3. Button (primary, secondary, tertiary)
+4. Input
+5. Combobox
+6. Checkbox Group (select-all / indeterminate state)
+7. Switch
+8. Toggle (segmented control, sliding indicator, built on radio group)
+9. Stepper (multi-step progress indicator — motion centerpiece)
+10. Motion docs page
+11. Component status page (optional)
+
+All components: all interactive states (hover, focus-visible, disabled), keyboard support, passing a11y checks, purposeful micro-interactions using motion tokens, prefers-reduced-motion support, short usage note per variant in story.
 
 ## Commits
 Suggest a commit message after each completed step. I'll commit myself.

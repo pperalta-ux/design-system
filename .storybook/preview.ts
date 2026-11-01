@@ -1,4 +1,6 @@
 import type { Preview } from '@storybook/web-components-vite'
+import '@awesome.me/webawesome/dist/components/button/button.js'
+import '@awesome.me/webawesome/dist/styles/webawesome.css'
 import '../src/tokens/index.css'
 
 const preview: Preview = {
