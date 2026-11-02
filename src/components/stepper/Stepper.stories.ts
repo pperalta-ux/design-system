@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import type { DsStepper, StepConfig } from './ds-stepper';
 import './ds-stepper';
+import { expect, userEvent, waitFor } from 'storybook/test';
 
 /* ─── Shared data ─────────────────────────────────────────────────── */
 const STEPS: StepConfig[] = [
@@ -172,4 +173,61 @@ export const States: Story = {
     wrapper.append(stepper, makeButtons(stepper));
     return wrapper;
   },
+};
+
+/* ─── Interaction tests ───────────────────────────────────────────── */
+
+const settle = () => new Promise(r => setTimeout(r, 300)); // animation lock is 250ms
+
+async function getParts(canvasElement: HTMLElement) {
+  await customElements.whenDefined('wa-stepper');
+  const stepper = canvasElement.querySelector('ds-stepper') as unknown as DsStepper;
+  await stepper.updateComplete;
+  const [back, next] = [...canvasElement.querySelectorAll('wa-button')] as HTMLElement[];
+  return { stepper, back, next };
+}
+
+Default.play = async ({ canvasElement }) => {
+  const { stepper, back, next } = await getParts(canvasElement);
+  await expect(stepper.activeIndex).toBe(1);
+
+  // Next advances, marks the previous step completed, and runs the motion classes
+  await userEvent.click(next!);
+  await waitFor(() => expect(stepper.activeIndex).toBe(2));
+  const steps = () => [...stepper.querySelectorAll('wa-step')];
+  await expect(steps()[1]).toHaveAttribute('completed');
+  await waitFor(() => expect(steps()[2]!.classList.contains('ds-step--entering')).toBe(true));
+  await settle();
+
+  // A second click during the animation is ignored
+  await userEvent.click(next!);
+  await userEvent.click(next!);
+  await waitFor(() => expect(stepper.activeIndex).toBe(3));
+  await settle();
+  await expect(stepper.activeIndex).toBe(3);
+
+  // Last step shows Finish, and Next does nothing
+  await waitFor(() => expect(next!.textContent?.trim()).toBe('Finish'));
+  await stepper.next();
+  await expect(stepper.activeIndex).toBe(3);
+
+  // Back walks to the first step and disables itself
+  for (const expected of [2, 1, 0]) {
+    await userEvent.click(back!);
+    await waitFor(() => expect(stepper.activeIndex).toBe(expected));
+    await settle();
+  }
+  await waitFor(() => expect(back).toHaveAttribute('disabled'));
+  await stepper.previous();
+  await expect(stepper.activeIndex).toBe(0);
+};
+
+Clickable.play = async ({ canvasElement }) => {
+  const { stepper } = await getParts(canvasElement);
+  // Simulates Web Awesome's own step click, which ds-stepper syncs from
+  stepper.dispatchEvent(new CustomEvent('wa-step-change', { detail: { name: 'source' }, bubbles: true }));
+  await waitFor(() => expect(stepper.activeIndex).toBe(0));
+  // Unknown or current step names are ignored
+  stepper.dispatchEvent(new CustomEvent('wa-step-change', { detail: { name: 'nope' }, bubbles: true }));
+  await expect(stepper.activeIndex).toBe(0);
 };
