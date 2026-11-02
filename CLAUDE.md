@@ -28,12 +28,13 @@ It replicates the design-to-code workflow from my "Design to Code" case study, u
 3. ✅ Button (primary, secondary, tertiary)
 4. ✅ Input
 5. ✅ Combobox
-6. Checkbox Group (select-all / indeterminate state)
-7. Switch
-8. Toggle (segmented control, sliding indicator, built on radio group)
-9. Stepper (multi-step progress indicator — motion centerpiece)
-10. Motion docs page
-11. Component status page (optional)
+6. ✅ Button icons (leading / trailing)
+7. Checkbox Group (select-all / indeterminate state)
+8. Switch
+9. Toggle (segmented control, sliding indicator, built on radio group)
+10. Stepper (multi-step progress indicator — motion centerpiece)
+11. Motion docs page
+12. Component status page (optional)
 
 All components: all interactive states (hover, focus-visible, disabled), keyboard support, passing a11y checks, purposeful micro-interactions using motion tokens, prefers-reduced-motion support, short usage note per variant in story.
 
@@ -46,6 +47,10 @@ Patterns learned while building; apply to every component going forward.
 - **Tags / chips sizing:** Follow Web Awesome's ratio — tag height = 80% of the field height (s: 26px, m: 32px, l: 38px). Use `line-height: 1` alongside an explicit `height` to override WA's `line-height: calc(--wa-form-control-height - border)`.
 - **Match WA's docs first:** Replicate the Web Awesome docs example exactly before customising. Only change fills/colors by overriding CSS custom properties with our tokens — never rewrite WA's layout or sizing.
 - **Consistent sample data:** Use the same theme (e.g. fruits) across every story in a component. Don't mix themes between variants.
+
+## Roadmap
+
+**Later:** Glow button for a dark-mode page (reference: Radix Colors homepage hero button)
 
 ## Commits
 Suggest a commit message after each completed step. I'll commit myself.
