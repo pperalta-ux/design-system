@@ -135,7 +135,11 @@ export class DsStepper extends LitElement {
             ?disabled=${!!step.disabled}
             ?loading=${!!step.loading}
           >
-            <span class="ds-step__label" data-label=${step.label}>${step.label}</span>
+            <span
+              class="ds-step__label"
+              data-label=${step.label}
+              aria-disabled=${step.disabled ? 'true' : nothing}
+            >${step.label}</span>
             ${step.description
               ? html`<span slot="description">${step.description}</span>`
               : nothing}
