@@ -194,7 +194,9 @@ Default.play = async ({ canvasElement }) => {
   await waitFor(() => expect(listbox()).toBeNull());
 
   // Clicking an option selects it
-  await userEvent.clear(input);
+  // userEvent.clear can't focus inputs inside Web Awesome's shadow DOM, so empty it directly
+  input.value = '';
+  input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
   await userEvent.type(input, 'kiw');
   await waitFor(() => expect(options()).toHaveLength(1));
   await userEvent.click(options()[0]!);

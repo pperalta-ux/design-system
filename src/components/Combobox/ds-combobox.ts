@@ -183,6 +183,12 @@ export class DsCombobox extends LitElement {
       const el = this._listboxEl();
       if (el) this._positionListbox(el);
     }
+
+    // Keep the keyboard-highlighted option visible when arrowing through a long list
+    if (changedProperties.has('_focusedIndex') && this._open && this._focusedIndex >= 0) {
+      this.querySelector('.ds-combobox__option.is-focused')
+        ?.scrollIntoView({ block: 'nearest' });
+    }
   }
 
   // ── Actions ───────────────────────────────────────────────────────────
@@ -409,6 +415,7 @@ export class DsCombobox extends LitElement {
             id=${listboxId}
             class="ds-combobox__listbox"
             popover="manual"
+            tabindex="-1"
             role="listbox"
             aria-label=${this.label}
             aria-multiselectable=${this.multiple ? 'true' : nothing}
