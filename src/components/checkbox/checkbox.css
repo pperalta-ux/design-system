@@ -1,6 +1,6 @@
 /* ─── Size: 16px default (s=14, l=18) ────────────────────────────── */
 wa-checkbox {
-  --wa-form-control-toggle-size: 16px;
+  --wa-form-control-toggle-size: 18px;
   --wa-focus-ring: none; /* replaced by border-color + box-shadow below */
 }
 
