@@ -25,8 +25,8 @@ It replicates the design-to-code workflow from my "Design to Code" case study, u
 ## Build order
 1. ✅ Tokens (color, type, spacing)
 2. ✅ Motion tokens (duration, easing)
-3. Button (primary, secondary, tertiary)
-4. Input
+3. ✅ Button (primary, secondary, tertiary)
+4. ✅ Input
 5. Combobox
 6. Checkbox Group (select-all / indeterminate state)
 7. Switch
