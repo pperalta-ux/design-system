@@ -169,10 +169,10 @@ Default.play = async ({ canvasElement }) => {
   const onChange = fn();
   combo.addEventListener('change', onChange);
 
-  // Typing filters the list
+  // Typing filters the list (matches anywhere in the name, so Grape counts)
   await userEvent.click(input);
   await userEvent.type(input, 'ap');
-  await waitFor(() => expect(options().map(o => o.textContent?.trim())).toEqual(['Apple', 'Apricot']));
+  await waitFor(() => expect(options().map(o => o.textContent?.trim())).toEqual(['Apple', 'Apricot', 'Grape']));
 
   // Arrow keys + Enter select an option and close the list
   await userEvent.keyboard('{ArrowDown}{ArrowDown}{ArrowUp}{Enter}');
@@ -232,8 +232,9 @@ Multiple.play = async ({ canvasElement }) => {
   await waitFor(() => expect(combo.values).toEqual(['mango', 'cherry']));
 
   // Backspace in an empty field removes the last value
-  await userEvent.clear(input);
-  await userEvent.keyboard('{Backspace}');
+  combo.querySelector('wa-input')!.dispatchEvent(
+    new KeyboardEvent('keydown', { key: 'Backspace', bubbles: true }),
+  );
   await waitFor(() => expect(combo.values).toEqual(['mango']));
 
   // Clear button removes everything
