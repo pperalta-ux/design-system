@@ -1,0 +1,81 @@
+/* ─── Size: 16px default (s=14, l=18) ────────────────────────────── */
+wa-checkbox {
+  --wa-form-control-toggle-size: 16px;
+  --wa-focus-ring: none; /* replaced by border-color + box-shadow below */
+}
+
+wa-checkbox[size="s"] { --wa-form-control-toggle-size: 14px; }
+wa-checkbox[size="l"] { --wa-form-control-toggle-size: 18px; }
+
+/* ─── Box shape + transitions ─────────────────────────────────────── */
+wa-checkbox::part(control) {
+  border-radius: 4px;
+  border-width: 1px;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow   var(--duration-fast) var(--ease-out),
+    background   var(--duration-fast) var(--ease-out);
+}
+
+/* ─── Hover: border → ink (skip when checked/indeterminate/disabled) ─ */
+wa-checkbox:not([disabled]):not(:state(checked)):not(:state(indeterminate)):hover::part(control) {
+  border-color: var(--color-text);
+}
+
+/* ─── Focus-visible: focus color + 3px halo ──────────────────────── */
+wa-checkbox:focus-within::part(control) {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+/* ─── Check / indeterminate icon: animate in ─────────────────────── */
+@keyframes ds-check-in {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+wa-checkbox:state(checked)::part(checked-icon),
+wa-checkbox:state(indeterminate)::part(indeterminate-icon) {
+  animation: ds-check-in var(--duration-fast) var(--ease-spring);
+}
+
+/* ─── Checkbox label ──────────────────────────────────────────────── */
+wa-checkbox::part(label) {
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}
+
+/* ─── Group label ─────────────────────────────────────────────────── */
+wa-checkbox-group::part(form-control-label) {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+/* ─── Group hint ──────────────────────────────────────────────────── */
+wa-checkbox-group::part(hint) {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-subtle);
+}
+
+/* ─── Error: data-invalid on the group host ──────────────────────── */
+wa-checkbox-group[data-invalid]::part(form-control-label) {
+  color: var(--color-error);
+}
+
+wa-checkbox-group[data-invalid]::part(hint) {
+  color: var(--color-error);
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  wa-checkbox::part(control) {
+    transition: none;
+  }
+
+  wa-checkbox:state(checked)::part(checked-icon),
+  wa-checkbox:state(indeterminate)::part(indeterminate-icon) {
+    animation: none;
+  }
+}
