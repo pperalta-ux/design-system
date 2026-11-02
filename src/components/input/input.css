@@ -34,7 +34,7 @@ wa-input::part(hint) {
 }
 
 /* ─── Hover: border → ink ─────────────────────────────────────────── */
-wa-input:not([disabled]):not([aria-invalid="true"])::part(base):hover {
+wa-input:not([disabled]):not([aria-invalid="true"]):not(:focus-within)::part(base):hover {
   border-color: var(--color-text);
 }
 
