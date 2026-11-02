@@ -1,0 +1,83 @@
+/* ─── Reset WA's inner input — all visual chrome is on ::part(base) ── */
+wa-input::part(input) {
+  border:     none;
+  outline:    none;
+  box-shadow: none;
+}
+
+/* ─── Visual input box (the border surface) ──────────────────────── */
+wa-input::part(base) {
+  border: 1px solid var(--color-border);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow   var(--duration-fast) var(--ease-out);
+}
+
+/* ─── Label ───────────────────────────────────────────────────────── */
+wa-input::part(form-control-label) {
+  font-size:     var(--font-size-sm);
+  font-weight:   var(--font-weight-medium);
+  color:         var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+/* ─── Placeholder ────────────────────────────────────────────────── */
+wa-input::part(input)::placeholder {
+  color: var(--color-placeholder);
+}
+
+/* ─── Hint ────────────────────────────────────────────────────────── */
+wa-input::part(hint) {
+  font-size:  var(--font-size-xs);
+  color:      var(--color-text-subtle);
+  margin-top: var(--space-1);
+}
+
+/* ─── Hover: border → ink ─────────────────────────────────────────── */
+wa-input:not([disabled]):not([aria-invalid="true"])::part(base):hover {
+  border-color: var(--color-text);
+}
+
+/* ─── Focus: focus-color border + 3px halo ───────────────────────── */
+wa-input:not([aria-invalid="true"]):focus-within::part(base) {
+  outline:      none;
+  border-color: var(--color-focus);
+  box-shadow:   0 0 0 3px var(--color-focus-halo);
+}
+
+/* ─── Error: red border + halo ────────────────────────────────────── */
+wa-input[aria-invalid="true"]::part(base) {
+  border-color: var(--color-error);
+}
+
+wa-input[aria-invalid="true"]:focus-within::part(base) {
+  outline:      none;
+  border-color: var(--color-error);
+  box-shadow:   0 0 0 3px var(--color-error-halo);
+}
+
+wa-input[aria-invalid="true"]::part(hint) {
+  color: var(--color-error);
+}
+
+/* ─── Disabled: 45% opacity ───────────────────────────────────────── */
+wa-input[disabled] {
+  opacity: 0.45;
+}
+
+wa-input[disabled]::part(input) {
+  cursor: not-allowed;
+}
+
+/* ─── Sizes: match Button heights (s=32px, m=40px, l=48px) ──────── */
+wa-input[size="s"]::part(base)                  { min-height: 32px; }
+wa-input[size="m"]::part(base),
+wa-input:not([size])::part(base)                { min-height: 40px; }
+wa-input[size="l"]::part(base)                  { min-height: 48px; }
+
+/* ─── Reduced motion ──────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  wa-input::part(base) {
+    transition: none;
+  }
+}

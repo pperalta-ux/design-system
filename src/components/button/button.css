@@ -11,29 +11,29 @@ wa-button::part(button):active {
   transform: scale(0.97);
 }
 
-/* Primary: darker orange fill on hover */
+/* Primary: darker cobalt fill on hover */
 wa-button[variant="brand"][appearance="accent"]::part(button):hover {
   background-color: var(--color-brand-hover);
   border-color:     var(--color-brand-hover);
 }
 
-/* Secondary: tint fill, shift text + border to hover orange */
+/* Secondary: tint fill, shift text + border to hover cobalt */
 wa-button[variant="brand"][appearance="outlined"]::part(button):hover {
   background-color: var(--color-brand-tint);
   border-color:     var(--color-brand-hover);
   color:            var(--color-brand-hover);
 }
 
-/* Tertiary: tint fill, shift text to hover orange */
+/* Tertiary: tint fill, shift text to hover cobalt */
 wa-button[variant="brand"][appearance="plain"]::part(button):hover {
   background-color: var(--color-brand-tint);
   color:            var(--color-brand-hover);
 }
 
-/* Focus ring: 2px white gap + 2px ink outer ring */
+/* Focus ring: 2px white gap + 2px focus-color ring (5.1:1 on white, AA) */
 wa-button::part(button):focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 2px #ffffff,
-    0 0 0 4px var(--color-text);
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-focus);
 }
