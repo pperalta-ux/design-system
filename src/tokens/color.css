@@ -78,6 +78,7 @@
   --wa-color-brand-on-normal:     var(--color-brand-hover);
   --wa-color-brand-on-loud:       #ffffff;
 
-  /* ─── Web Awesome: focus ring ────────────────────────────── */
-  --wa-color-focus: var(--color-focus);
+  /* ─── Web Awesome: focus ring + form controls ───────────── */
+  --wa-color-focus:              var(--color-focus);
+  --wa-form-control-value-color: var(--color-text);
 }
