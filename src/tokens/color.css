@@ -56,18 +56,18 @@
   --wa-color-neutral-10: var(--color-neutral-10);
   --wa-color-neutral-05: var(--color-neutral-05);
 
-  /* ─── Web Awesome: brand scale (violet ramp, #5b3fd6 at 50) ── */
-  --wa-color-brand-95: #f4f2fc;
-  --wa-color-brand-90: #e1dcf8;
-  --wa-color-brand-80: #c1b6ef;
-  --wa-color-brand-70: #9d8ce6;
-  --wa-color-brand-60: #7962dd;
-  --wa-color-brand-50: #5b3fd6;
-  --wa-color-brand-40: #4731a7;
-  --wa-color-brand-30: #382785;
-  --wa-color-brand-20: #291c60;
-  --wa-color-brand-10: #19123c;
-  --wa-color-brand-05: #0e0920;
+  /* ─── Web Awesome: brand scale (violet ramp, #6b55e3 at 50) ── */
+  --wa-color-brand-95: #f5f3fd;
+  --wa-color-brand-90: #e4e0fa;
+  --wa-color-brand-80: #c7bef4;
+  --wa-color-brand-70: #a699ee;
+  --wa-color-brand-60: #8674e8;
+  --wa-color-brand-50: #6b55e3;
+  --wa-color-brand-40: #5342b1;
+  --wa-color-brand-30: #42358d;
+  --wa-color-brand-20: #302666;
+  --wa-color-brand-10: #1e1840;
+  --wa-color-brand-05: #100d22;
 
   /* ─── Web Awesome: brand semantic tokens ─────────────────────── */
   /* Unlayered CSS beats @layer wa-theme, so these always win.      */
