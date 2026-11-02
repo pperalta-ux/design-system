@@ -106,6 +106,25 @@ export const Error: Story = {
   `,
 };
 
+export const Multiple: Story = {
+  parameters: {
+    docs: { description: { story: 'Selected options appear as tags. The input filters the list, and stays clear after each pick so you can keep selecting.' } },
+  },
+  render: ({ size }) => html`
+    <div style="max-width: 320px;">
+      <ds-combobox
+        label="Favourite fruits"
+        placeholder="Search…"
+        size=${size}
+        multiple
+        with-clear
+        .values=${['banana', 'mango']}
+        .options=${FRUITS}
+      ></ds-combobox>
+    </div>
+  `,
+};
+
 export const Disabled: Story = {
   parameters: {
     docs: { description: { story: 'The whole element drops to 45% opacity. Pointer events are off; cursor becomes not-allowed.' } },

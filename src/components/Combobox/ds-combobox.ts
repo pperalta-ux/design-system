@@ -8,17 +8,21 @@ let _uid = 0;
 
 export class DsCombobox extends LitElement {
   static override properties = {
-    label:         { type: String },
-    placeholder:   { type: String },
-    hint:          { type: String },
-    size:          { type: String },
-    disabled:      { type: Boolean },
-    invalid:       { type: String,  attribute: 'aria-invalid' },
-    options:       { type: Array },
-    value:         { type: String },
-    _open:         { state: true },
-    _filter:       { state: true },
-    _focusedIndex: { state: true },
+    label:             { type: String },
+    placeholder:       { type: String },
+    hint:              { type: String },
+    size:              { type: String },
+    disabled:          { type: Boolean },
+    invalid:           { type: String,  attribute: 'aria-invalid' },
+    options:           { type: Array },
+    value:             { type: String },
+    multiple:          { type: Boolean },
+    maxOptionsVisible: { type: Number, attribute: 'max-options-visible' },
+    withClear:         { type: Boolean, attribute: 'with-clear' },
+    values:            { type: Array },
+    _open:             { state: true },
+    _filter:           { state: true },
+    _focusedIndex:     { state: true },
   };
 
   /*
@@ -27,24 +31,28 @@ export class DsCombobox extends LitElement {
    * that Lit creates via Object.defineProperty, silently breaking updates.
    * `declare` emits nothing at runtime — defaults live in the constructor.
    */
-  declare label:       string;
-  declare placeholder: string;
-  declare hint:        string;
-  declare size:        string;
-  declare disabled:    boolean;
-  declare invalid:     string;
-  declare options:     Option[];
-  declare value:       string;
+  declare label:             string;
+  declare placeholder:       string;
+  declare hint:              string;
+  declare size:              string;
+  declare disabled:          boolean;
+  declare invalid:           string;
+  declare options:           Option[];
+  declare value:             string;
+  declare multiple:          boolean;
+  declare maxOptionsVisible: number;
+  declare withClear:         boolean;
+  declare values:            string[];
 
   private declare _open:         boolean;
   private declare _filter:       string;
   private declare _focusedIndex: number;
 
-  private _id        = ++_uid;
-  private _blurTimer = 0;
+  private _id             = ++_uid;
+  private _blurTimer      = 0;
+  private _resizeObserver: ResizeObserver | null = null;
 
   // Stable reference so the same function can be removed from addEventListener.
-  // Runs on every captured scroll / resize while the menu is open.
   private _reposition = () => {
     const field = this.querySelector('wa-input');
     if (!field) return;
@@ -60,17 +68,21 @@ export class DsCombobox extends LitElement {
 
   constructor() {
     super();
-    this.label       = '';
-    this.placeholder = '';
-    this.hint        = '';
-    this.size        = 'm';
-    this.disabled    = false;
-    this.invalid     = '';
-    this.options     = [];
-    this.value       = '';
-    this._open         = false;
-    this._filter       = '';
-    this._focusedIndex = -1;
+    this.label             = '';
+    this.placeholder       = '';
+    this.hint              = '';
+    this.size              = 'm';
+    this.disabled          = false;
+    this.invalid           = '';
+    this.options           = [];
+    this.value             = '';
+    this.multiple          = false;
+    this.maxOptionsVisible = 2;
+    this.withClear         = false;
+    this.values            = [];
+    this._open             = false;
+    this._filter           = '';
+    this._focusedIndex     = -1;
   }
 
   // No shadow DOM — external CSS (input.css, combobox.css) can target internals
@@ -86,6 +98,10 @@ export class DsCombobox extends LitElement {
 
   private _selectedLabel(): string {
     return this.options.find(o => o.value === this.value)?.label ?? '';
+  }
+
+  private _labelFor(val: string): string {
+    return this.options.find(o => o.value === val)?.label ?? val;
   }
 
   // ── Popover helpers ───────────────────────────────────────────────────
@@ -139,6 +155,20 @@ export class DsCombobox extends LitElement {
   // ── Lit lifecycle ─────────────────────────────────────────────────────
 
   override updated(changedProperties: Map<PropertyKey, unknown>) {
+    // ResizeObserver for multi mode: reposition the menu when tags cause the field to grow
+    if (this.multiple && !this._resizeObserver) {
+      const field = this.querySelector('wa-input');
+      if (field) {
+        this._resizeObserver = new ResizeObserver(() => {
+          if (this._open) {
+            const el = this._listboxEl();
+            if (el) this._positionListbox(el);
+          }
+        });
+        this._resizeObserver.observe(field);
+      }
+    }
+
     if (changedProperties.has('_open') && this._open) {
       // Transition: closed → open — <ul> is now in the DOM
       const el = this._listboxEl();
@@ -149,7 +179,7 @@ export class DsCombobox extends LitElement {
         window.addEventListener('resize', this._reposition, { passive: true });
       }
     } else if (this._open) {
-      // Re-render while already open (filter changed) → reposition in case height changed
+      // Re-render while already open (filter/selection changed) → reposition in case height changed
       const el = this._listboxEl();
       if (el) this._positionListbox(el);
     }
@@ -158,13 +188,45 @@ export class DsCombobox extends LitElement {
   // ── Actions ───────────────────────────────────────────────────────────
 
   private _select(opt: Option) {
-    const value = opt.value;
-    this._closeList();
-    this.value = value;
+    if (this.multiple) {
+      // Toggle: click a selected option to deselect it
+      const idx = this.values.indexOf(opt.value);
+      if (idx >= 0) {
+        this.values = this.values.filter(v => v !== opt.value);
+      } else {
+        this.values = [...this.values, opt.value];
+      }
+      // Clear filter but keep menu open so the user can keep picking
+      this._filter       = '';
+      this._focusedIndex = -1;
+      this.dispatchEvent(new CustomEvent('change', {
+        detail: { value: [...this.values] },
+        bubbles: true, composed: true,
+      }));
+    } else {
+      const value = opt.value;
+      this._closeList();
+      this.value = value;
+      this.dispatchEvent(new CustomEvent('change', {
+        detail: { value },
+        bubbles: true, composed: true,
+      }));
+    }
+  }
+
+  private _deselect(val: string) {
+    this.values = this.values.filter(v => v !== val);
     this.dispatchEvent(new CustomEvent('change', {
-      detail: { value },
-      bubbles: true,
-      composed: true,
+      detail: { value: [...this.values] },
+      bubbles: true, composed: true,
+    }));
+  }
+
+  private _clearAll() {
+    this.values = [];
+    this.dispatchEvent(new CustomEvent('change', {
+      detail: { value: [] },
+      bubbles: true, composed: true,
     }));
   }
 
@@ -206,6 +268,12 @@ export class DsCombobox extends LitElement {
       case 'Tab':
         this._closeList();
         break;
+      case 'Backspace':
+        // Remove last tag when backspace is pressed in an empty input
+        if (this.multiple && this._filter === '' && this.values.length > 0) {
+          this._deselect(this.values[this.values.length - 1]!);
+        }
+        break;
     }
   }
 
@@ -214,7 +282,7 @@ export class DsCombobox extends LitElement {
   }
 
   private _onBlur() {
-    // Delay so mousedown on an option fires _select before we close
+    // Delay so mousedown on an option or tag fires before we close
     this._blurTimer = window.setTimeout(() => {
       if (!this.contains(document.activeElement)) {
         this._closeList();
@@ -224,14 +292,22 @@ export class DsCombobox extends LitElement {
 
   private _onChevronMouseDown(e: MouseEvent) {
     if (this.disabled) return;
-    // preventDefault stops the wa-input losing focus to the clicked element
+    // preventDefault stops wa-input losing focus to the clicked element
     e.preventDefault();
     if (this._open) {
       this._closeList();
     } else {
       this._openList();
     }
-    // Keep/move focus to the text field after Lit's DOM update
+    requestAnimationFrame(() => {
+      const waInput = this.querySelector('wa-input');
+      if (waInput) (waInput as HTMLElement).focus();
+    });
+  }
+
+  private _onClearMouseDown(e: MouseEvent) {
+    e.preventDefault();
+    this._clearAll();
     requestAnimationFrame(() => {
       const waInput = this.querySelector('wa-input');
       if (waInput) (waInput as HTMLElement).focus();
@@ -243,20 +319,32 @@ export class DsCombobox extends LitElement {
   override render() {
     const list      = this._filtered;
     const listboxId = `ds-combobox-listbox-${this._id}`;
-    const fieldVal  = this._filter || this._selectedLabel();
+    // Single mode: show selected label when not filtering.
+    // Multi mode: show only the filter text; selected values appear as tags.
+    const fieldVal  = this.multiple
+      ? this._filter
+      : (this._filter || this._selectedLabel());
 
     const wrapClass = [
       'ds-combobox',
-      this._open               ? 'is-open'     : '',
-      this.disabled            ? 'is-disabled' : '',
-      this.invalid === 'true'  ? 'is-invalid'  : '',
+      this._open              ? 'is-open'     : '',
+      this.disabled           ? 'is-disabled' : '',
+      this.invalid === 'true' ? 'is-invalid'  : '',
+      this.multiple           ? 'is-multi'    : '',
     ].filter(Boolean).join(' ');
+
+    const visibleValues = this.multiple
+      ? this.values.slice(0, this.maxOptionsVisible)
+      : [];
+    const overflow = this.multiple
+      ? Math.max(0, this.values.length - this.maxOptionsVisible)
+      : 0;
 
     return html`
       <div class=${wrapClass}>
         <wa-input
           label=${this.label}
-          placeholder=${this.placeholder}
+          placeholder=${this.multiple && this.values.length > 0 ? nothing : this.placeholder}
           hint=${this.hint || nothing}
           size=${this.size}
           ?disabled=${this.disabled}
@@ -272,6 +360,34 @@ export class DsCombobox extends LitElement {
           @focus=${this._onFocus}
           @blur=${this._onBlur}
         >
+          ${this.multiple && this.values.length > 0 ? html`
+            <span slot="start" class="ds-combobox__tags">
+              ${visibleValues.map(v => html`
+                <wa-tag
+                  size="s"
+                  with-remove
+                  @wa-remove=${() => this._deselect(v)}
+                >${this._labelFor(v)}</wa-tag>
+              `)}
+              ${overflow > 0 ? html`
+                <wa-tag size="s">+${overflow}</wa-tag>
+              ` : nothing}
+            </span>
+          ` : nothing}
+
+          ${this.withClear && this.multiple && this.values.length > 0 ? html`
+            <button
+              slot="end"
+              class="ds-combobox__clear"
+              aria-label="Clear all selections"
+              @mousedown=${this._onClearMouseDown}
+            >
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          ` : nothing}
+
           <span
             slot="end"
             class="ds-combobox__chevron"
@@ -295,9 +411,12 @@ export class DsCombobox extends LitElement {
             popover="manual"
             role="listbox"
             aria-label=${this.label}
+            aria-multiselectable=${this.multiple ? 'true' : nothing}
           >
             ${list.map((opt, i) => {
-              const sel = opt.value === this.value;
+              const sel = this.multiple
+                ? this.values.includes(opt.value)
+                : opt.value === this.value;
               const foc = i === this._focusedIndex;
               return html`
                 <li
@@ -322,6 +441,8 @@ export class DsCombobox extends LitElement {
     super.disconnectedCallback();
     this._removePositionListeners();
     clearTimeout(this._blurTimer);
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = null;
   }
 }
 

@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/web-components-vite'
 import '@awesome.me/webawesome/dist/components/button/button.js'
 import '@awesome.me/webawesome/dist/components/input/input.js'
+import '@awesome.me/webawesome/dist/components/tag/tag.js'
 import '@awesome.me/webawesome/dist/styles/webawesome.css'
 import '../src/tokens/index.css'
 import '../src/components/Combobox/ds-combobox'

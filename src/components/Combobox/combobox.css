@@ -85,6 +85,76 @@ ds-combobox {
   display: block;
 }
 
+/* ── Multi-select: tag strip (in wa-input's start slot) ──────────────── */
+.ds-combobox__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/*
+ * Reduce field padding in multi mode so tags sit close to the borders.
+ * --wa-form-control-padding-inline (default 1em ≈ 14–20px per size) controls
+ * both the left inset before the start slot and the right inset after the end
+ * slot. Overriding it here via CSS custom property inheritance into shadow DOM.
+ */
+.ds-combobox.is-multi wa-input {
+  --wa-form-control-padding-inline: 6px;
+}
+
+/*
+ * Tag sizing — explicit height + line-height: 1 to override WA's
+ * `line-height: calc(--wa-form-control-height - border)` which otherwise
+ * stretches `height: auto` tags to the full field height.
+ * WA's tag styles are in @layer wa-component; our unlayered rules win.
+ */
+.ds-combobox__tags wa-tag {
+  --wa-color-fill-quiet:    var(--color-brand-tint-subtle);
+  --wa-color-on-quiet:      var(--color-text);
+  --wa-color-border-normal: var(--color-neutral-80);
+  --wa-border-radius-m:     4px;
+  height:      32px;   /* m: 80% of 40px field → ~4px space each side */
+  line-height: 1;
+  padding:     0 6px 0 8px;
+  gap:         6px;    /* between label text and × icon */
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Size variants: s=26px (32px field), l=38px (48px field) */
+ds-combobox[size="s"] .ds-combobox__tags wa-tag { height: 26px; }
+ds-combobox[size="l"] .ds-combobox__tags wa-tag { height: 38px; }
+
+/* Remove button (X): compact 12×12, subtle → text on hover, no bg change */
+.ds-combobox__tags wa-tag::part(remove-button__base) {
+  color:     var(--color-text-subtle);
+  width:     12px;
+  height:    12px;
+  min-width: 0;
+}
+.ds-combobox__tags wa-tag::part(remove-button__base):hover {
+  color:      var(--color-text);
+  background: transparent;
+}
+
+/* ── Clear-all button (in wa-input's end slot, before the chevron) ────── */
+.ds-combobox__clear {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  background:      none;
+  border:          none;
+  padding:         0 2px;
+  cursor:          pointer;
+  color:           var(--color-text-subtle);
+  transition:      color var(--duration-fast) var(--ease-out);
+}
+
+.ds-combobox__clear:hover {
+  color: var(--color-text);
+}
+
 /* ── Chevron expand icon (in wa-input's end slot) ─────────────────────── */
 .ds-combobox__chevron {
   display:     flex;
@@ -109,4 +179,5 @@ ds-combobox {
   .ds-combobox__listbox:popover-open { animation: none; }
   .ds-combobox .ds-combobox__option  { transition: none; }
   .ds-combobox__chevron              { transition: none; }
+  .ds-combobox__clear                { transition: none; }
 }

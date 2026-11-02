@@ -15,7 +15,8 @@
   /* ─── Brand (cobalt) ─────────────────────────────────────── */
   --color-brand:       #1a33a0;   /* cobalt — 10.35:1 on white */
   --color-brand-hover: #0f1f75;   /* darker cobalt — 14.5:1 on white */
-  --color-brand-tint:  #eaedfa;   /* soft cobalt fill */
+  --color-brand-tint:        #eaedfa;   /* soft cobalt fill */
+  --color-brand-tint-subtle: #f4f6fd;   /* lightest cobalt tint */
 
   /* ─── Accent (orange, for gradient + future use) ─────────── */
   --color-accent: #dd6831;
