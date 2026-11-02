@@ -26,6 +26,9 @@
   --color-gradient-end:   #dd6831;
   --gradient-hero: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
 
+  /* ─── Selection fill (toggle active segment) ────────────── */
+  --color-selected: #e1dcf8;   /* violet tint — WA brand-90 */
+
   /* ─── Semantic ───────────────────────────────────────────── */
   --color-bg:                #ffffff;
   --color-text:              var(--color-neutral-05);

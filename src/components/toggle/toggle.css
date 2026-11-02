@@ -1,0 +1,105 @@
+/* ─── Container ─────────────────────────────────────────────────── */
+.ds-toggle {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+/* ─── Equal-width segments ───────────────────────────────────────── */
+/* The slot element is WA's flex row. Replacing it with a grid makes
+   every column 1fr — they all resolve to the widest segment's
+   max-content, so the whole group stays compact but segments match.  */
+.ds-toggle wa-radio-group::part(form-control-input) {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+}
+
+/* ─── All radio buttons: override every WA default with our tokens ─ */
+.ds-toggle wa-radio[appearance="button"] {
+  /* Heights match Button and Input */
+  --wa-form-control-height: 40px;
+
+  /* Border radius: 4px outer corners (WA uses --wa-border-radius-m) */
+  --wa-border-radius-m: 4px;
+
+  /* Inline padding */
+  --wa-form-control-padding-inline: var(--space-3);
+
+  /* ── Fill ─────────────────────────────────────────────────────── */
+  /* Rest: white container background                                */
+  --wa-color-surface-default: var(--color-bg);
+  /* Checked: violet selection fill — WA fades it via its own
+     background-color transition, duration driven by --wa-transition-fast */
+  --wa-color-brand-fill-quiet: var(--color-selected);
+  /* Hover on inactive: suppress WA's color-mix tint; text-only change */
+  --wa-color-mix-hover: transparent;
+
+  /* ── Border ───────────────────────────────────────────────────── */
+  /* --color-border (#8c8c8c, 3.3:1 on white) meets WCAG 1.4.11    */
+  --wa-form-control-border-color: var(--color-border);
+  /* Checked border stays the same — no brand outline               */
+  --wa-form-control-activated-color: var(--color-border);
+
+  /* ── Focus ring ──────────────────────────────────────────────── */
+  --wa-focus-ring: 2px solid var(--color-focus);
+  --wa-focus-ring-offset: 2px;
+
+  /* ── Typography ──────────────────────────────────────────────── */
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  /* Listing every property explicitly so the shorthand does not reset
+     WA's background-color / border-color transitions. External CSS
+     beats shadow-DOM :host() — a single `transition:` shorthand wipes
+     out everything WA declared and leaves only what we name.          */
+  transition-property: color, background-color, border-color, font-weight;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-toggle wa-radio[appearance="button"] { transition: none; }
+}
+
+/* ─── Size variants ─────────────────────────────────────────────── */
+.ds-toggle--s wa-radio[appearance="button"] {
+  --wa-form-control-height: 32px;
+  --wa-form-control-padding-inline: var(--space-2);
+  font-size: var(--font-size-xs);
+}
+
+.ds-toggle--l wa-radio[appearance="button"] {
+  --wa-form-control-height: 48px;
+  --wa-form-control-padding-inline: var(--space-4);
+  font-size: var(--font-size-md);
+}
+
+/* ─── Hover (inactive only): text darkens; white bg explicit to
+   prevent WA's color-mix hover rule from tinting the surface.     ─ */
+.ds-toggle wa-radio[appearance="button"]:hover:not(:state(checked)):not(:state(disabled)) {
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+/* ─── Checked / Active ───────────────────────────────────────────── */
+.ds-toggle wa-radio[appearance="button"]:state(checked) {
+  color: var(--color-text);
+  font-weight: 600;  /* semibold — selection must not rely on fill alone */
+}
+
+/* ─── Option layout: icon + label ───────────────────────────────── */
+.ds-toggle__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.ds-toggle__option svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.ds-toggle--s .ds-toggle__option svg { width: 14px; height: 14px; }
+.ds-toggle--l .ds-toggle__option svg { width: 18px; height: 18px; }
