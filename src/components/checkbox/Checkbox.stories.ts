@@ -4,7 +4,7 @@ import './checkbox.css';
 import './ds-checkbox-group';
 
 const meta = {
-  title: 'Components/CheckboxGroup',
+  title: 'Components/Checkbox Group',
   tags: ['autodocs'],
 } satisfies Meta;
 
