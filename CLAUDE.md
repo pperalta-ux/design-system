@@ -48,6 +48,7 @@ Patterns learned while building; apply to every component going forward.
 - **Match WA's docs first:** Replicate the Web Awesome docs example exactly before customising. Only change fills/colors by overriding CSS custom properties with our tokens — never rewrite WA's layout or sizing.
 - **Consistent sample data:** Use the same theme (e.g. fruits) across every story in a component. Don't mix themes between variants.
 - **Error states:** Only add error styling where Web Awesome supports validation (form-associated elements like `wa-checkbox`, `wa-input`). Drive them from `:state(user-invalid)` — never a custom attribute like `data-invalid`. Components that apply instantly and aren't submitted (e.g. Switch) have no error state.
+- **Focus on toggles (checkbox, switch, radio, toggle):** Keyboard only. Use Web Awesome's `--wa-focus-ring` and `--wa-focus-ring-offset` tokens — never `:focus-within`, which also fires on mouse click and creates a sticky halo.
 
 ## Roadmap
 

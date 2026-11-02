@@ -1,7 +1,8 @@
 /* ─── Size tokens (m default; s and l via attribute) ──────────────── */
 wa-switch {
   --wa-form-control-background-color: var(--color-neutral-80);
-  --wa-focus-ring: none; /* replaced by box-shadow below */
+  --wa-focus-ring: 2px solid var(--color-focus);
+  --wa-focus-ring-offset: 2px;
   --height: 20px;
   --width: 36px;
   --thumb-size: 16px;
@@ -26,10 +27,6 @@ wa-switch:not([disabled]):hover::part(control) {
   filter: brightness(0.92);
 }
 
-/* ─── Focus-visible: 2px focus ring + 3px halo ───────────────────── */
-wa-switch:focus-within::part(control) {
-  box-shadow: 0 0 0 2px var(--color-focus), 0 0 0 5px var(--color-focus-halo);
-}
 
 /* ─── Label ───────────────────────────────────────────────────────── */
 wa-switch::part(label) {

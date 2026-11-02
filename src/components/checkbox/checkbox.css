@@ -1,7 +1,8 @@
 /* ─── Size: 16px default (s=14, l=18) ────────────────────────────── */
 wa-checkbox {
   --wa-form-control-toggle-size: 16px;
-  --wa-focus-ring: none; /* replaced by border-color + box-shadow below */
+  --wa-focus-ring: 2px solid var(--color-focus);
+  --wa-focus-ring-offset: 2px;
 }
 
 wa-checkbox[size="s"] { --wa-form-control-toggle-size: 14px; }
@@ -22,11 +23,6 @@ wa-checkbox:not([disabled]):not(:state(checked)):not(:state(indeterminate)):hove
   border-color: var(--color-text);
 }
 
-/* ─── Focus-visible: focus color + 3px halo ──────────────────────── */
-wa-checkbox:focus-within::part(control) {
-  border-color: var(--color-focus);
-  box-shadow: 0 0 0 3px var(--color-focus-halo);
-}
 
 /* ─── Check / indeterminate icon: animate in ─────────────────────── */
 @keyframes ds-check-in {
