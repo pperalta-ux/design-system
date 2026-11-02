@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
+import { expect, userEvent, waitFor } from 'storybook/test';
 import './checkbox.css';
 import './ds-checkbox-group';
 
@@ -113,4 +114,29 @@ export const Disabled: Story = {
       <wa-checkbox value="strawberry" disabled>Strawberry</wa-checkbox>
     </wa-checkbox-group>
   `,
+};
+
+/* ─── Interaction tests ───────────────────────────────────────────── */
+SelectAll.play = async ({ canvasElement }) => {
+  await customElements.whenDefined('wa-checkbox');
+  const group = canvasElement.querySelector('ds-checkbox-group') as HTMLElement & { values: string[] };
+  // Click the real <input> inside each wa-checkbox; clicks on the host don't toggle it
+  const boxes = () => [...group.querySelectorAll('wa-checkbox')].map(
+    cb => cb.shadowRoot!.querySelector('input') as HTMLInputElement,
+  );
+  await expect(group.values).toEqual(['apple', 'mango']);
+
+  // Select all checks every option
+  await userEvent.click(boxes()[0]!);
+  await waitFor(() => expect(group.values).toEqual(['apple', 'banana', 'mango', 'strawberry']));
+
+  // Clicking again clears everything
+  await userEvent.click(boxes()[0]!);
+  await waitFor(() => expect(group.values).toEqual([]));
+
+  // A single option can be checked and unchecked
+  await userEvent.click(boxes()[2]!); // Banana
+  await waitFor(() => expect(group.values).toEqual(['banana']));
+  await userEvent.click(boxes()[2]!);
+  await waitFor(() => expect(group.values).toEqual([]));
 };

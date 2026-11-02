@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
+import { expect, fn, userEvent, waitFor } from 'storybook/test';
 import './toggle.css';
 import './ds-toggle';
 
@@ -184,4 +185,18 @@ export const Disabled: Story = {
       })()}
     </div>
   `,
+};
+
+/* ─── Interaction tests ───────────────────────────────────────────── */
+TwoOptions.play = async ({ canvasElement }) => {
+  await customElements.whenDefined('wa-radio');
+  const toggle = canvasElement.querySelector('ds-toggle') as HTMLElement & { value: string };
+  const onChange = fn();
+  toggle.addEventListener('change', onChange);
+  await expect(toggle.value).toBe('chart');
+
+  const table = toggle.querySelector('wa-radio[value="table"]') as HTMLElement;
+  await userEvent.click(table);
+  await waitFor(() => expect(toggle.value).toBe('table'));
+  await expect(onChange).toHaveBeenCalled();
 };
