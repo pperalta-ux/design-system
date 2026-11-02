@@ -102,9 +102,6 @@ export const LeadingIcon: Story = {
   },
   render: (args) => {
     const { size } = args;
-    // #region agent log
-    fetch('http://127.0.0.1:7781/ingest/1f83d134-f098-41b3-a906-13ae3f48eedd',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'59c4dc'},body:JSON.stringify({sessionId:'59c4dc',runId:'pre-fix',hypothesisId:'A',location:'Button.stories.ts:LeadingIcon',message:'LeadingIcon render args',data:{size,sizeType:typeof size,sizeUndefined:size===undefined,hasOwnSize:Object.prototype.hasOwnProperty.call(args,'size'),argKeys:Object.keys(args)},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     return html`
     <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap;">
       <wa-button variant="brand" appearance="accent" size=${size}>${iconPlus} Add item</wa-button>
@@ -121,9 +118,6 @@ export const TrailingIcon: Story = {
   },
   render: (args) => {
     const { size } = args;
-    // #region agent log
-    fetch('http://127.0.0.1:7781/ingest/1f83d134-f098-41b3-a906-13ae3f48eedd',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'59c4dc'},body:JSON.stringify({sessionId:'59c4dc',runId:'pre-fix',hypothesisId:'A',location:'Button.stories.ts:TrailingIcon',message:'TrailingIcon render args',data:{size,sizeType:typeof size,sizeUndefined:size===undefined,hasOwnSize:Object.prototype.hasOwnProperty.call(args,'size'),argKeys:Object.keys(args)},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     return html`
     <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap;">
       <wa-button variant="brand" appearance="accent" size=${size}>Continue ${iconArrowRight}</wa-button>

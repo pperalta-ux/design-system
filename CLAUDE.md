@@ -33,8 +33,8 @@ It replicates the design-to-code workflow from my "Design to Code" case study, u
 8. ✅ Switch
 9. ✅ Toggle (segmented control, built on radio group)
 10. ✅ Stepper (multi-step progress indicator — motion centerpiece)
-11. Motion docs page
-12. Component status page (optional)
+11. ✅ Motion docs page
+12. ✅ Component status page (optional)
 
 All components: all interactive states (hover, focus-visible, disabled), keyboard support, passing a11y checks, purposeful micro-interactions using motion tokens, prefers-reduced-motion support, short usage note per variant in story.
 

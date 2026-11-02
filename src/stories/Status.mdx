@@ -1,0 +1,21 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import './StatusTable';
+
+<Meta title="Overview/Status" />
+
+# Component status
+
+This table is built automatically from Storybook's story index at runtime. Adding a new component's `.stories.ts` file is enough — it appears here without any manual update.
+
+<ds-status-table />
+
+**Status key**
+
+- **Stable** — API settled; all interactive states covered; a11y checked manually against WCAG 2.1 AA.
+- **Experimental** — component works but the underlying Web Awesome element is pre-1.0; API may change.
+
+**Column key**
+
+- **Keyboard** — component is fully keyboard-operable (Tab, Arrow keys, Space/Enter as appropriate).
+- **Reduced motion** — all durations zero out under `prefers-reduced-motion: reduce` via motion.css; keyframe animations suppressed individually where needed.
+- **a11y** — "manual" means verified by hand; automated a11y addon results are shown in each story's Accessibility tab.

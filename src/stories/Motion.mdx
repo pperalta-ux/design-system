@@ -1,0 +1,86 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import './MotionDemos';
+
+<Meta title="Foundations/Motion" />
+
+# Motion
+
+This design system uses a small set of duration and easing tokens to keep animation consistent and purposeful across every component. The tokens live in `src/tokens/motion.css`; the values in the tables below are read live from the CSS custom properties, so they can never drift from the source.
+
+---
+
+## Duration tokens
+
+<ds-motion-table type="duration" />
+
+## Easing tokens
+
+<ds-motion-table type="easing" />
+
+---
+
+## Live examples
+
+Each demo uses the real component. Click **Replay** to re-trigger the animation.
+
+### Button press
+
+<ds-replay-demo name="button" />
+
+### Toggle selection
+
+<ds-replay-demo name="toggle" />
+
+### Switch thumb
+
+<ds-replay-demo name="switch" />
+
+### Stepper spring + ring pulse
+
+<ds-replay-demo name="stepper" />
+
+---
+
+## Reduced motion
+
+`motion.css` zeros all four `--duration-*` tokens to `0ms` under `prefers-reduced-motion: reduce`:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast:    0ms;
+    --duration-normal:  0ms;
+    --duration-slow:    0ms;
+  }
+}
+```
+
+This also zeros WA's own transition overrides (`--wa-transition-fast`, `--wa-transition-normal`, `--wa-transition-slow`), so every transition in every component completes instantly — not just hidden, genuinely instantaneous. Keyframe animations on the Stepper get an additional explicit `animation: none` in `stepper.css` because keyframes don't inherit from the token cascade.
+
+No component needs bespoke reduced-motion code; the cascade handles it.
+
+---
+
+## Rules
+
+### Never animate `font-weight`
+
+Animating `font-weight` causes a visible flicker: the text briefly appears heavier during the transition before snapping to its target weight. Keep `font-weight` out of `transition-property` entirely. Only animate `color`, `background-color`, and `border-color`. Weight switches instantly; color fades.
+
+### Keyboard-only focus rings
+
+Use `--wa-focus-ring` and `--wa-focus-ring-offset` tokens — never `:focus-within`. The `:focus-within` pseudo-class fires on mouse click as well as keyboard, creating a sticky halo that won't dismiss. Focus rings appear on keyboard navigation only.
+
+### Never use the `transition` shorthand on a WA host element
+
+External CSS beats the shadow-DOM `:host()` rule, so a single `transition: color …` shorthand silently resets every transition WA already declared (background-color, border-color, etc.) — fills snap instead of fading. Always use the longhands: `transition-property`, `transition-duration`, `transition-timing-function`, listing every property you need alongside WA's.
+
+### Timing budget
+
+| Interaction type | Budget | Examples |
+|---|---|---|
+| Micro-interaction | fast / normal (150–250 ms) | Button press, toggle fade, switch slide |
+| Expressive sequence | ≤ 500 ms total | Stepper: spring at 100 ms delay + 350 ms = 450 ms; ring at 150 ms delay + 350 ms = 500 ms |
+
+Carbon and Material 3 both specify that expressive moments earn the longer duration; every-click feedback must feel instant.
