@@ -27,7 +27,7 @@ export const Checked: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'The on state: track fills with --color-brand (cobalt) and the thumb slides to the right. Set the checked attribute to start in this state.',
+        story: 'The on state: track fills with --color-brand (violet) and the thumb slides to the right. Set the checked attribute to start in this state.',
       },
     },
   },

@@ -12,11 +12,11 @@
   --color-neutral-10: #2d2d2d;
   --color-neutral-05: #221e19;   /* ink */
 
-  /* ─── Brand (cobalt) ─────────────────────────────────────── */
-  --color-brand:       #1a33a0;   /* cobalt — 10.35:1 on white */
-  --color-brand-hover: #0f1f75;   /* darker cobalt — 14.5:1 on white */
-  --color-brand-tint:        #eaedfa;   /* soft cobalt fill */
-  --color-brand-tint-subtle: #f4f6fd;   /* lightest cobalt tint */
+  /* ─── Brand (violet) ─────────────────────────────────────── */
+  --color-brand:       #5b3fd6;   /* violet — 6.7:1 on white */
+  --color-brand-hover: #4731a7;   /* darker violet — 9.3:1 on white */
+  --color-brand-tint:        #efecfb;   /* soft violet fill */
+  --color-brand-tint-subtle: #f8f7fd;   /* lightest violet tint */
 
   /* ─── Accent (orange, for gradient + future use) ─────────── */
   --color-accent: #dd6831;
@@ -53,18 +53,18 @@
   --wa-color-neutral-10: var(--color-neutral-10);
   --wa-color-neutral-05: var(--color-neutral-05);
 
-  /* ─── Web Awesome: brand scale (cobalt ramp, #1A33A0 at 50) ── */
-  --wa-color-brand-95: #eef1fc;
-  --wa-color-brand-90: #d3daf5;
-  --wa-color-brand-80: #a3b3eb;
-  --wa-color-brand-70: #6b87dc;
-  --wa-color-brand-60: #3a5bc8;
-  --wa-color-brand-50: #1a33a0;
-  --wa-color-brand-40: #0f1f75;
-  --wa-color-brand-30: #091660;
-  --wa-color-brand-20: #05104a;
-  --wa-color-brand-10: #030a33;
-  --wa-color-brand-05: #01051a;
+  /* ─── Web Awesome: brand scale (violet ramp, #5b3fd6 at 50) ── */
+  --wa-color-brand-95: #f4f2fc;
+  --wa-color-brand-90: #e1dcf8;
+  --wa-color-brand-80: #c1b6ef;
+  --wa-color-brand-70: #9d8ce6;
+  --wa-color-brand-60: #7962dd;
+  --wa-color-brand-50: #5b3fd6;
+  --wa-color-brand-40: #4731a7;
+  --wa-color-brand-30: #382785;
+  --wa-color-brand-20: #291c60;
+  --wa-color-brand-10: #19123c;
+  --wa-color-brand-05: #0e0920;
 
   /* ─── Web Awesome: brand semantic tokens ─────────────────────── */
   /* Unlayered CSS beats @layer wa-theme, so these always win.      */

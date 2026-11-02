@@ -26,7 +26,7 @@ wa-switch:not([disabled]):hover::part(control) {
   filter: brightness(0.92);
 }
 
-/* ─── Focus-visible: 2px cobalt ring + 3px halo ──────────────────── */
+/* ─── Focus-visible: 2px focus ring + 3px halo ───────────────────── */
 wa-switch:focus-within::part(control) {
   box-shadow: 0 0 0 2px var(--color-focus), 0 0 0 5px var(--color-focus-halo);
 }

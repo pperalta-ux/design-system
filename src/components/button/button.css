@@ -11,20 +11,20 @@ wa-button::part(button):active {
   transform: scale(0.97);
 }
 
-/* Primary: darker cobalt fill on hover */
+/* Primary: darker violet fill on hover */
 wa-button[variant="brand"][appearance="accent"]::part(button):hover {
   background-color: var(--color-brand-hover);
   border-color:     var(--color-brand-hover);
 }
 
-/* Secondary: tint fill, shift text + border to hover cobalt */
+/* Secondary: tint fill, shift text + border to hover violet */
 wa-button[variant="brand"][appearance="outlined"]::part(button):hover {
   background-color: var(--color-brand-tint);
   border-color:     var(--color-brand-hover);
   color:            var(--color-brand-hover);
 }
 
-/* Tertiary: tint fill, shift text to hover cobalt */
+/* Tertiary: tint fill, shift text to hover violet */
 wa-button[variant="brand"][appearance="plain"]::part(button):hover {
   background-color: var(--color-brand-tint);
   color:            var(--color-brand-hover);

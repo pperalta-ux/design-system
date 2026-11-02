@@ -72,7 +72,7 @@ export const Default: Story = {
 
 export const WithValue: Story = {
   parameters: {
-    docs: { description: { story: 'A value is pre-selected. Open the list to see the cobalt checkmark beside the selected option.' } },
+    docs: { description: { story: 'A value is pre-selected. Open the list to see the violet checkmark beside the selected option.' } },
   },
   render: ({ label, placeholder, size }) => html`
     <div style="max-width: 320px;">

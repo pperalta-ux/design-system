@@ -70,7 +70,7 @@ ds-combobox {
   background: var(--color-brand-tint);
 }
 
-/* ── Cobalt checkmark — mask lets the token control the color ─────────── */
+/* ── Violet checkmark — mask lets the token control the color ─────────── */
 .ds-combobox__check {
   display:      none;
   width:        16px;
