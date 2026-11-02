@@ -89,15 +89,19 @@ export class DsStepper extends LitElement {
     // Force reflow so the animation restarts cleanly if the class is already present.
     void (toEl as HTMLElement | undefined)?.offsetWidth;
 
-    // CSS handles timing: spring at 160ms delay, ring pulse at 300ms delay.
-    // Ring: 300ms delay + 520ms duration = 820ms total.
     toEl?.classList.add('ds-step--entering');
     fromEl?.classList.add('ds-step--checking');
-    await this._delay(820);
 
-    toEl?.classList.remove('ds-step--entering');
-    fromEl?.classList.remove('ds-step--checking');
+    // Release lock after connector settles (--duration-normal = 250ms).
+    // Spring + ring keep playing independently; they finish at ~500ms.
+    await this._delay(250);
     this._animating = false;
+
+    // Strip classes after the full 500ms sequence (250ms already elapsed).
+    void this._delay(250).then(() => {
+      toEl?.classList.remove('ds-step--entering');
+      fromEl?.classList.remove('ds-step--checking');
+    });
   }
 
   async previous(): Promise<void> {
@@ -110,7 +114,8 @@ export class DsStepper extends LitElement {
     this.activeIndex = fromIdx - 1;
     await this.updateComplete;
 
-    await this._delay(200);
+    // Connector transition is --duration-normal (250ms); small buffer for settle.
+    await this._delay(260);
     this._animating = false;
   }
 

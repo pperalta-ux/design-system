@@ -53,6 +53,10 @@ Patterns learned while building; apply to every component going forward.
 - **Borders on controls use `--color-border` (3.3:1 on white, meets WCAG 1.4.11):** Never `--color-neutral-70` or lighter. Selection must never rely on fill colour alone — pair it with a weight change (600) or shape change so it survives colour-blind and high-contrast modes.
 - **Never transition `font-weight`; switch it instantly and fade color/fill instead.** Animating font-weight causes a visible flicker — the text briefly appears heavier during the transition before snapping to the target weight. Keep `font-weight` out of `transition-property` entirely; only `color`, `background-color`, and `border-color` belong there.
 
+## Motion
+
+- **Expressive sequences finish within 500ms total; micro-interactions use fast/normal.** (Carbon/Material guidance: expressive moments earn the extra duration; every-click feedback must feel instant.)
+
 ## Roadmap
 
 **Later:** Glow button for a dark-mode page (reference: Radix Colors homepage hero button)

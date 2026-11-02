@@ -12,7 +12,7 @@
    when a step gains or loses the `completed` attribute.             */
 .ds-stepper wa-step::part(connector) {
   transition-property: background-color;
-  transition-duration: var(--duration-fast);
+  transition-duration: var(--duration-normal);
   transition-timing-function: var(--ease-out);
 }
 
@@ -103,12 +103,13 @@
 
 /* ─── Animation triggers (class-driven) ─────────────────────────── */
 /* ds-step--entering is added immediately after Lit updateComplete.
-   animation-delay handles timing: spring waits for connector fill
-   (~150ms = --duration-fast); ring lands as the spring overshoots. */
+   Connector fill: --duration-normal (250ms, t=0).
+   Spring: delayed 100ms, runs --duration-slow (350ms) → ends at 450ms.
+   Ring:   delayed 150ms, runs --duration-slow (350ms) → ends at 500ms. */
 .ds-stepper wa-step.ds-step--entering::part(marker) {
   animation:
-    ds-marker-enter var(--duration-slow) var(--ease-spring) 160ms both,
-    ds-ring-pulse   520ms                var(--ease-out)    300ms both;
+    ds-marker-enter var(--duration-slow) var(--ease-spring) 100ms both,
+    ds-ring-pulse   var(--duration-slow) var(--ease-out)    150ms both;
 }
 
 .ds-stepper wa-step.ds-step--checking::part(marker) {
