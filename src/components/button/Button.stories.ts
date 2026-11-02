@@ -2,6 +2,14 @@ import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
 import './button.css';
 
+const iconPlus = html`<svg slot="start" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+  <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>`;
+
+const iconArrowRight = html`<svg slot="end" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
 const meta = {
   title: 'Components/Button',
   tags: ['autodocs'],
@@ -84,6 +92,32 @@ export const States: Story = {
       <wa-button variant="brand" appearance="accent">Default</wa-button>
       <wa-button variant="brand" appearance="accent" loading>Loading</wa-button>
       <wa-button variant="brand" appearance="accent" disabled>Disabled</wa-button>
+    </div>
+  `,
+};
+
+export const LeadingIcon: Story = {
+  parameters: {
+    docs: { description: { story: 'Leading icon reinforces the action. SVG goes in slot="start" and inherits the button\'s text color via currentColor.' } },
+  },
+  render: ({ size }) => html`
+    <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap;">
+      <wa-button variant="brand" appearance="accent" size=${size}>${iconPlus} Add item</wa-button>
+      <wa-button variant="brand" appearance="outlined" size=${size}>${iconPlus} Add item</wa-button>
+      <wa-button variant="brand" appearance="plain" size=${size}>${iconPlus} Add item</wa-button>
+    </div>
+  `,
+};
+
+export const TrailingIcon: Story = {
+  parameters: {
+    docs: { description: { story: 'Trailing icon suggests forward motion. SVG goes in slot="end" and inherits the button\'s text color via currentColor.' } },
+  },
+  render: ({ size }) => html`
+    <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap;">
+      <wa-button variant="brand" appearance="accent" size=${size}>Continue ${iconArrowRight}</wa-button>
+      <wa-button variant="brand" appearance="outlined" size=${size}>Continue ${iconArrowRight}</wa-button>
+      <wa-button variant="brand" appearance="plain" size=${size}>Continue ${iconArrowRight}</wa-button>
     </div>
   `,
 };

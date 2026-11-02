@@ -27,7 +27,7 @@ It replicates the design-to-code workflow from my "Design to Code" case study, u
 2. ✅ Motion tokens (duration, easing)
 3. ✅ Button (primary, secondary, tertiary)
 4. ✅ Input
-5. Combobox
+5. ✅ Combobox
 6. Checkbox Group (select-all / indeterminate state)
 7. Switch
 8. Toggle (segmented control, sliding indicator, built on radio group)
@@ -36,6 +36,16 @@ It replicates the design-to-code workflow from my "Design to Code" case study, u
 11. Component status page (optional)
 
 All components: all interactive states (hover, focus-visible, disabled), keyboard support, passing a11y checks, purposeful micro-interactions using motion tokens, prefers-reduced-motion support, short usage note per variant in story.
+
+## Component lessons
+Patterns learned while building; apply to every component going forward.
+
+- **Light DOM components:** Storybook's global styles (list resets, margins) leak in. Defeat them with higher-specificity selectors, e.g. `.ds-combobox .ds-combobox__listbox` rather than `.ds-combobox__listbox` alone.
+- **Floating dropdowns:** Use `popover="manual"` + JS `getBoundingClientRect()` positioning + a scroll listener with `{ capture: true }`. Never force a story wrapper to be tall enough to show the open state.
+- **No forced-open stories:** If a variant needs the dropdown visible, open it with a user gesture in the story, not a fixed `min-height` or `overflow: visible` hack.
+- **Tags / chips sizing:** Follow Web Awesome's ratio — tag height = 80% of the field height (s: 26px, m: 32px, l: 38px). Use `line-height: 1` alongside an explicit `height` to override WA's `line-height: calc(--wa-form-control-height - border)`.
+- **Match WA's docs first:** Replicate the Web Awesome docs example exactly before customising. Only change fills/colors by overriding CSS custom properties with our tokens — never rewrite WA's layout or sizing.
+- **Consistent sample data:** Use the same theme (e.g. fruits) across every story in a component. Don't mix themes between variants.
 
 ## Commits
 Suggest a commit message after each completed step. I'll commit myself.

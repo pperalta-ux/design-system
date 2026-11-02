@@ -37,3 +37,16 @@ wa-button::part(button):focus-visible {
     0 0 0 2px var(--color-bg),
     0 0 0 4px var(--color-focus);
 }
+
+/* Icon slots: constrain to size-matched dimensions; color inherits from button text */
+wa-button > [slot="start"],
+wa-button > [slot="end"] {
+  display: flex;
+  align-items: center;
+  width:  16px;   /* m default */
+  height: 16px;
+}
+wa-button[size="s"] > [slot="start"],
+wa-button[size="s"] > [slot="end"] { width: 14px; height: 14px; }
+wa-button[size="l"] > [slot="start"],
+wa-button[size="l"] > [slot="end"] { width: 18px; height: 18px; }
