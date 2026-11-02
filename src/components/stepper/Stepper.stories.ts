@@ -18,18 +18,48 @@ const STEPS_WITH_DESCRIPTIONS: StepConfig[] = [
 ];
 
 /* ─── Button helper ───────────────────────────────────────────────── */
+function makeSvgIcon(slot: 'start' | 'end', pathD: string): SVGElement {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('slot', slot);
+  svg.setAttribute('width', '16');
+  svg.setAttribute('height', '16');
+  svg.setAttribute('viewBox', '0 0 16 16');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', pathD);
+  path.setAttribute('stroke', 'currentColor');
+  path.setAttribute('stroke-width', '1.5');
+  path.setAttribute('stroke-linecap', 'round');
+  path.setAttribute('stroke-linejoin', 'round');
+  svg.appendChild(path);
+  return svg;
+}
+
+const PATH_ARROW_LEFT  = 'M13 8H3M7 4l-4 4 4 4';
+const PATH_ARROW_RIGHT = 'M3 8h10M9 4l4 4-4 4';
+
 function makeButtons(stepper: DsStepper): HTMLElement {
   const back = document.createElement('wa-button');
-  back.setAttribute('variant', 'default');
-  back.textContent = 'Back';
+  back.setAttribute('variant', 'brand');
+  back.setAttribute('appearance', 'outlined');
+  back.appendChild(makeSvgIcon('start', PATH_ARROW_LEFT));
+  back.appendChild(document.createTextNode('Back'));
 
   const next = document.createElement('wa-button');
-  next.setAttribute('variant', 'filled');
+  next.setAttribute('variant', 'brand');
+  next.setAttribute('appearance', 'accent');
+
+  const syncNext = () => {
+    while (next.firstChild) next.removeChild(next.firstChild);
+    next.appendChild(document.createTextNode(stepper.isLast ? 'Finish' : 'Next'));
+    if (!stepper.isLast) next.appendChild(makeSvgIcon('end', PATH_ARROW_RIGHT));
+  };
 
   const sync = () => {
     if (stepper.isFirst) back.setAttribute('disabled', '');
     else back.removeAttribute('disabled');
-    next.textContent = stepper.isLast ? 'Finish' : 'Next';
+    syncNext();
   };
 
   back.addEventListener('click', async () => { await stepper.previous(); sync(); });
@@ -38,7 +68,7 @@ function makeButtons(stepper: DsStepper): HTMLElement {
   sync();
 
   const row = document.createElement('div');
-  row.style.cssText = 'display: flex; gap: 12px; margin-top: 8px;';
+  row.style.cssText = 'display: flex; gap: var(--space-3); margin-top: 8px; justify-content: flex-end;';
   row.append(back, next);
   return row;
 }

@@ -12,11 +12,11 @@
   --color-neutral-10: #2d2d2d;
   --color-neutral-05: #221e19;   /* ink */
 
-  /* ─── Brand (violet) ─────────────────────────────────────── */
-  --color-brand:       #5b3fd6;   /* violet — 6.7:1 on white */
-  --color-brand-hover: #4731a7;   /* darker violet — 9.3:1 on white */
-  --color-brand-tint:        #efecfb;   /* soft violet fill */
-  --color-brand-tint-subtle: #f8f7fd;   /* lightest violet tint */
+  /* ─── Brand (violet, matches resume) ────────────────────── */
+  --color-brand:       #6b55e3;   /* violet, matches resume — 5.2:1 with white text */
+  --color-brand-hover: #5342b1;   /* darker violet — 7.6:1 */
+  --color-brand-tint:        #f0eefc;   /* soft violet fill */
+  --color-brand-tint-subtle: #f9f8fe;   /* lightest violet tint */
 
   /* ─── Accent (orange, for gradient + future use) ─────────── */
   --color-accent: #dd6831;
@@ -27,7 +27,7 @@
   --gradient-hero: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
 
   /* ─── Selection fill (toggle active segment) ────────────── */
-  --color-selected: #e1dcf8;   /* violet tint — WA brand-90 */
+  --color-selected: #e4e0fa;   /* violet tint — WA brand-90; toggle fill, ink text 12.9:1 */
 
   /* ─── Semantic ───────────────────────────────────────────── */
   --color-bg:                #ffffff;
