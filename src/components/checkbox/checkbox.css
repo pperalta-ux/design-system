@@ -59,12 +59,19 @@ wa-checkbox-group::part(hint) {
   color: var(--color-text-subtle);
 }
 
-/* ─── Error: data-invalid on the group host ──────────────────────── */
-wa-checkbox-group[data-invalid]::part(form-control-label) {
+/* ─── Error: driven by WA's constraint validation ─────────────────── */
+/* wa-checkbox:state(user-invalid) fires after a failed form submit   */
+/* on any required, unchecked checkbox. :has() propagates the error   */
+/* colour up to the group label and hint without extra JS.             */
+wa-checkbox:state(user-invalid)::part(control) {
+  border-color: var(--color-error);
+}
+
+wa-checkbox-group:has(wa-checkbox:state(user-invalid))::part(form-control-label) {
   color: var(--color-error);
 }
 
-wa-checkbox-group[data-invalid]::part(hint) {
+wa-checkbox-group:has(wa-checkbox:state(user-invalid))::part(hint) {
   color: var(--color-error);
 }
 

@@ -14,7 +14,7 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Switch applies its change immediately — no form submission needed. Use Switch for instant-effect settings (notifications, dark mode). Use Checkbox when the user must click Save to commit.',
+        story: 'Switch applies its change immediately and is never submitted with a form, so it has no error state. Use Checkbox when the setting requires a Save action.',
       },
     },
   },
@@ -65,23 +65,6 @@ export const Sizes: Story = {
       <wa-switch size="m">Push notifications (medium)</wa-switch>
       <wa-switch size="l">Push notifications (large)</wa-switch>
     </div>
-  `,
-};
-
-export const Error: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Add data-invalid to the element. The label and hint both switch to --color-error. Pair with a hint that names the required action.',
-      },
-    },
-  },
-  render: () => html`
-    <wa-switch
-      hint="Please choose a notification preference to continue."
-      data-invalid>
-      Email notifications
-    </wa-switch>
   `,
 };
 

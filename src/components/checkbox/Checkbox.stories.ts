@@ -75,20 +75,25 @@ export const Error: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Add data-invalid to the group element. The CSS selector wa-checkbox-group[data-invalid]::part(hint) turns the hint text error-red. The group label also switches to --color-error to signal the invalid state.',
+        story: 'required on each wa-checkbox uses WA\'s built-in constraint validation. Click Submit with nothing checked — :state(user-invalid) fires on every unchecked required checkbox, turning its border red; :has() propagates the error colour to the group label and hint. Check a fruit to clear that checkbox\'s error individually.',
       },
     },
   },
   render: () => html`
-    <wa-checkbox-group
-      label="Favourite fruits"
-      hint="Pick at least one fruit."
-      data-invalid>
-      <wa-checkbox value="apple">Apple</wa-checkbox>
-      <wa-checkbox value="banana">Banana</wa-checkbox>
-      <wa-checkbox value="mango">Mango</wa-checkbox>
-      <wa-checkbox value="strawberry">Strawberry</wa-checkbox>
-    </wa-checkbox-group>
+    <form
+      @submit=${(e: Event) => e.preventDefault()}
+      style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4);">
+      <wa-checkbox-group
+        label="Favourite fruits"
+        hint="Pick at least one fruit."
+        required>
+        <wa-checkbox value="apple"      name="fruit" required>Apple</wa-checkbox>
+        <wa-checkbox value="banana"     name="fruit" required>Banana</wa-checkbox>
+        <wa-checkbox value="mango"      name="fruit" required>Mango</wa-checkbox>
+        <wa-checkbox value="strawberry" name="fruit" required>Strawberry</wa-checkbox>
+      </wa-checkbox-group>
+      <button type="submit">Submit</button>
+    </form>
   `,
 };
 

@@ -47,6 +47,7 @@ Patterns learned while building; apply to every component going forward.
 - **Tags / chips sizing:** Follow Web Awesome's ratio — tag height = 80% of the field height (s: 26px, m: 32px, l: 38px). Use `line-height: 1` alongside an explicit `height` to override WA's `line-height: calc(--wa-form-control-height - border)`.
 - **Match WA's docs first:** Replicate the Web Awesome docs example exactly before customising. Only change fills/colors by overriding CSS custom properties with our tokens — never rewrite WA's layout or sizing.
 - **Consistent sample data:** Use the same theme (e.g. fruits) across every story in a component. Don't mix themes between variants.
+- **Error states:** Only add error styling where Web Awesome supports validation (form-associated elements like `wa-checkbox`, `wa-input`). Drive them from `:state(user-invalid)` — never a custom attribute like `data-invalid`. Components that apply instantly and aren't submitted (e.g. Switch) have no error state.
 
 ## Roadmap
 

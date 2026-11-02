@@ -44,10 +44,6 @@ wa-switch::part(hint) {
   margin-top: var(--space-1);
 }
 
-/* ─── Error ───────────────────────────────────────────────────────── */
-wa-switch[data-invalid]::part(label) { color: var(--color-error); }
-wa-switch[data-invalid]::part(hint)  { color: var(--color-error); }
-
 /* ─── Reduced motion ──────────────────────────────────────────────── */
 /* motion.css zeros --duration-fast → 0ms under prefers-reduced-motion,
    which zeros --wa-transition-normal → thumb snaps, no slide. */
