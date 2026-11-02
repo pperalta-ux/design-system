@@ -16,6 +16,19 @@ import '../src/components/stepper/ds-stepper'
 
 const preview: Preview = {
   parameters: {
+    options: {
+      // Sections in a fixed order, components A–Z, stories kept in file order.
+      // (Must be self-contained: Storybook serializes this function.)
+      storySort: (a, b) => {
+        const sections = ['Overview', 'Foundations', 'Components'];
+        if (a.title === b.title) return 0;
+        const [sa, ...ra] = a.title.split('/');
+        const [sb, ...rb] = b.title.split('/');
+        const ia = sections.indexOf(sa), ib = sections.indexOf(sb);
+        if (ia !== ib) return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+        return ra.join('/').localeCompare(rb.join('/'), undefined, { numeric: true });
+      },
+    },
     controls: {
       matchers: {
        color: /(background|color)$/i,
