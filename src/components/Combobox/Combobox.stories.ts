@@ -24,7 +24,7 @@ const meta = {
       description: {
         component: 'Use Combobox when the user picks from a predefined list. Use Input for free-form text. Combobox supports type-to-filter but does not accept arbitrary values. For lists over ~20 items it scales better than a Radio Group.',
       },
-      story: { height: '360px' },
+
     },
   },
   argTypes: {
@@ -87,31 +87,6 @@ export const WithValue: Story = {
   `,
 };
 
-export const Open: Story = {
-  parameters: {
-    docs: { description: { story: 'Dropdown open with the full list visible. Hover an option to see --color-brand-tint fill; the selected option shows a cobalt checkmark.' } },
-  },
-  render: ({ label, placeholder, size }) => {
-    const ref = html`
-      <div style="max-width: 320px; padding-bottom: 280px;">
-        <ds-combobox
-          id="story-open"
-          label=${label}
-          placeholder=${placeholder}
-          size=${size}
-          value="cherry"
-          .options=${FRUITS}
-        ></ds-combobox>
-      </div>
-    `;
-    // Force the list open after Lit renders
-    requestAnimationFrame(() => {
-      const el = document.getElementById('story-open') as unknown as { _open: boolean };
-      if (el) el._open = true;
-    });
-    return ref;
-  },
-};
 
 export const Error: Story = {
   parameters: {

@@ -20,11 +20,10 @@ ds-combobox {
 
 /* ── Dropdown panel ───────────────────────────────────────────────────── */
 .ds-combobox__listbox {
-  position:   absolute;
-  top:        calc(100% + var(--space-1));
-  left:       0;
-  right:      0;
-  z-index:    100;
+  /* Top-layer popover: JS sets top/left/width; reset UA defaults */
+  position:   fixed;
+  inset:      auto;
+  margin:     0;
 
   background:    var(--color-bg);
   border:        1px solid var(--color-neutral-80);
@@ -34,11 +33,14 @@ ds-combobox {
   max-height:  240px;
   overflow-y:  auto;
   list-style:  none;
+}
 
+/* Animation fires when the popover enters the top layer */
+.ds-combobox__listbox:popover-open {
   animation: ds-combobox-open var(--duration-normal) var(--ease-out) both;
 }
 
-/* Higher specificity to defeat Storybook's global <ul> reset */
+/* Higher specificity to defeat Storybook's global <ul> and UA popover resets */
 .ds-combobox .ds-combobox__listbox {
   margin:  0;
   padding: var(--space-1);
@@ -104,7 +106,7 @@ ds-combobox {
 
 /* ── Reduced motion ───────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .ds-combobox__listbox { animation: none; }
-  .ds-combobox .ds-combobox__option { transition: none; }
-  .ds-combobox__chevron { transition: none; }
+  .ds-combobox__listbox:popover-open { animation: none; }
+  .ds-combobox .ds-combobox__option  { transition: none; }
+  .ds-combobox__chevron              { transition: none; }
 }

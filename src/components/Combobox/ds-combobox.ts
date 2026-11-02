@@ -1,7 +1,8 @@
 import { LitElement, html, nothing } from 'lit';
 import { live } from 'lit/directives/live.js';
 
-type Option = { value: string; label: string };
+type Option    = { value: string; label: string };
+type PopoverEl = HTMLElement & { showPopover(): void; hidePopover(): void };
 
 let _uid = 0;
 
@@ -42,6 +43,21 @@ export class DsCombobox extends LitElement {
   private _id        = ++_uid;
   private _blurTimer = 0;
 
+  // Stable reference so the same function can be removed from addEventListener.
+  // Runs on every captured scroll / resize while the menu is open.
+  private _reposition = () => {
+    const field = this.querySelector('wa-input');
+    if (!field) return;
+    const r = field.getBoundingClientRect();
+    // Close if the field has scrolled fully out of the visible area
+    if (r.bottom < 0 || r.top > window.innerHeight) {
+      this._closeList();
+      return;
+    }
+    const el = this._listboxEl();
+    if (el) this._positionListbox(el);
+  };
+
   constructor() {
     super();
     this.label       = '';
@@ -72,15 +88,81 @@ export class DsCombobox extends LitElement {
     return this.options.find(o => o.value === this.value)?.label ?? '';
   }
 
+  // ── Popover helpers ───────────────────────────────────────────────────
+
+  private _listboxEl(): PopoverEl | null {
+    return this.querySelector('.ds-combobox__listbox') as PopoverEl | null;
+  }
+
+  private _positionListbox(el: PopoverEl) {
+    const field = this.querySelector('wa-input');
+    if (!field) return;
+    const r     = field.getBoundingClientRect();
+    // scrollHeight is readable synchronously once the element is in the top layer
+    const menuH = Math.min(240, el.scrollHeight);
+
+    el.style.width = `${r.width}px`;
+    el.style.left  = `${r.left}px`;
+
+    const spaceBelow = window.innerHeight - r.bottom - 4;
+    if (spaceBelow < menuH && r.top > menuH + 4) {
+      el.style.top = `${r.top - menuH - 4}px`; // open above
+    } else {
+      el.style.top = `${r.bottom + 4}px`;       // open below
+    }
+  }
+
+  private _removePositionListeners() {
+    window.removeEventListener('scroll', this._reposition, { capture: true });
+    window.removeEventListener('resize', this._reposition);
+  }
+
+  // ── Open / close ──────────────────────────────────────────────────────
+
+  private _openList() {
+    if (this._open) return;
+    this._open = true;
+    // updated() fires after Lit's DOM update and calls showPopover() + positions
+  }
+
+  private _closeList() {
+    if (!this._open) return;
+    this._removePositionListeners();
+    // hidePopover() must run BEFORE Lit removes the <ul> from the DOM
+    const el = this._listboxEl();
+    if (el) { try { el.hidePopover(); } catch { /* already hidden */ } }
+    this._open         = false;
+    this._filter       = '';
+    this._focusedIndex = -1;
+  }
+
+  // ── Lit lifecycle ─────────────────────────────────────────────────────
+
+  override updated(changedProperties: Map<PropertyKey, unknown>) {
+    if (changedProperties.has('_open') && this._open) {
+      // Transition: closed → open — <ul> is now in the DOM
+      const el = this._listboxEl();
+      if (el) {
+        el.showPopover();
+        this._positionListbox(el);
+        window.addEventListener('scroll', this._reposition, { passive: true, capture: true });
+        window.addEventListener('resize', this._reposition, { passive: true });
+      }
+    } else if (this._open) {
+      // Re-render while already open (filter changed) → reposition in case height changed
+      const el = this._listboxEl();
+      if (el) this._positionListbox(el);
+    }
+  }
+
   // ── Actions ───────────────────────────────────────────────────────────
 
   private _select(opt: Option) {
-    this.value     = opt.value;
-    this._filter   = '';
-    this._open     = false;
-    this._focusedIndex = -1;
+    const value = opt.value;
+    this._closeList();
+    this.value = value;
     this.dispatchEvent(new CustomEvent('change', {
-      detail: { value: opt.value },
+      detail: { value },
       bubbles: true,
       composed: true,
     }));
@@ -90,7 +172,7 @@ export class DsCombobox extends LitElement {
 
   private _onInput(e: Event) {
     this._filter = (e.currentTarget as unknown as { value: string }).value ?? '';
-    this._open   = true;
+    this._openList();
     this._focusedIndex = -1;
   }
 
@@ -99,7 +181,7 @@ export class DsCombobox extends LitElement {
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        this._open         = true;
+        this._openList();
         this._focusedIndex = this._focusedIndex < list.length - 1
           ? this._focusedIndex + 1 : 0;
         break;
@@ -115,17 +197,14 @@ export class DsCombobox extends LitElement {
           const opt = list[this._focusedIndex];
           if (opt) this._select(opt);
         } else {
-          this._open = true;
+          this._openList();
         }
         break;
       case 'Escape':
-        this._open         = false;
-        this._filter       = '';
-        this._focusedIndex = -1;
+        this._closeList();
         break;
       case 'Tab':
-        this._open         = false;
-        this._focusedIndex = -1;
+        this._closeList();
         break;
     }
   }
@@ -138,9 +217,7 @@ export class DsCombobox extends LitElement {
     // Delay so mousedown on an option fires _select before we close
     this._blurTimer = window.setTimeout(() => {
       if (!this.contains(document.activeElement)) {
-        this._open         = false;
-        this._filter       = '';
-        this._focusedIndex = -1;
+        this._closeList();
       }
     }, 150);
   }
@@ -150,11 +227,9 @@ export class DsCombobox extends LitElement {
     // preventDefault stops the wa-input losing focus to the clicked element
     e.preventDefault();
     if (this._open) {
-      this._open         = false;
-      this._filter       = '';
-      this._focusedIndex = -1;
+      this._closeList();
     } else {
-      this._open = true;
+      this._openList();
     }
     // Keep/move focus to the text field after Lit's DOM update
     requestAnimationFrame(() => {
@@ -217,6 +292,7 @@ export class DsCombobox extends LitElement {
           <ul
             id=${listboxId}
             class="ds-combobox__listbox"
+            popover="manual"
             role="listbox"
             aria-label=${this.label}
           >
@@ -244,6 +320,7 @@ export class DsCombobox extends LitElement {
 
   override disconnectedCallback() {
     super.disconnectedCallback();
+    this._removePositionListeners();
     clearTimeout(this._blurTimer);
   }
 }
