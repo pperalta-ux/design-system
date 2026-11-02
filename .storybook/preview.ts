@@ -7,9 +7,12 @@ import '@awesome.me/webawesome/dist/components/checkbox-group/checkbox-group.js'
 import '@awesome.me/webawesome/dist/components/switch/switch.js'
 import '@awesome.me/webawesome/dist/components/radio-group/radio-group.js'
 import '@awesome.me/webawesome/dist/components/radio/radio.js'
+import '@awesome.me/webawesome/dist/components/stepper/stepper.js'
+import '@awesome.me/webawesome/dist/components/step/step.js'
 import '@awesome.me/webawesome/dist/styles/webawesome.css'
 import '../src/tokens/index.css'
 import '../src/components/Combobox/ds-combobox'
+import '../src/components/stepper/ds-stepper'
 
 const preview: Preview = {
   parameters: {

@@ -51,8 +51,10 @@
   /* Listing every property explicitly so the shorthand does not reset
      WA's background-color / border-color transitions. External CSS
      beats shadow-DOM :host() — a single `transition:` shorthand wipes
-     out everything WA declared and leaves only what we name.          */
-  transition-property: color, background-color, border-color, font-weight;
+     out everything WA declared and leaves only what we name.
+     font-weight is intentionally absent: animating it causes a flicker
+     (briefly heavier before settling); weight switches instantly.     */
+  transition-property: color, background-color, border-color;
   transition-duration: var(--duration-fast);
   transition-timing-function: var(--ease-out);
 }

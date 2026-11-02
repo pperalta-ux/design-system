@@ -29,9 +29,9 @@ It replicates the design-to-code workflow from my "Design to Code" case study, u
 4. ✅ Input
 5. ✅ Combobox
 6. ✅ Button icons (leading / trailing)
-7. Checkbox Group (select-all / indeterminate state)
-8. Switch
-9. Toggle (segmented control, sliding indicator, built on radio group)
+7. ✅ Checkbox Group (select-all / indeterminate state)
+8. ✅ Switch
+9. ✅ Toggle (segmented control, built on radio group)
 10. Stepper (multi-step progress indicator — motion centerpiece)
 11. Motion docs page
 12. Component status page (optional)
@@ -51,6 +51,7 @@ Patterns learned while building; apply to every component going forward.
 - **Focus on toggles (checkbox, switch, radio, toggle):** Keyboard only. Use Web Awesome's `--wa-focus-ring` and `--wa-focus-ring-offset` tokens — never `:focus-within`, which also fires on mouse click and creates a sticky halo.
 - **Never set `transition` shorthand on a Web Awesome host element.** External CSS beats shadow-DOM `:host()`, so a single `transition: color …` declaration silently resets every `background-color` and `border-color` transition WA already declared — the fill snaps instead of fading. Always use the longhands: `transition-property`, `transition-duration`, `transition-timing-function`, listing every property you need alongside WA's.
 - **Borders on controls use `--color-border` (3.3:1 on white, meets WCAG 1.4.11):** Never `--color-neutral-70` or lighter. Selection must never rely on fill colour alone — pair it with a weight change (600) or shape change so it survives colour-blind and high-contrast modes.
+- **Never transition `font-weight`; switch it instantly and fade color/fill instead.** Animating font-weight causes a visible flicker — the text briefly appears heavier during the transition before snapping to the target weight. Keep `font-weight` out of `transition-property` entirely; only `color`, `background-color`, and `border-color` belong there.
 
 ## Roadmap
 

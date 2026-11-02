@@ -1,0 +1,120 @@
+/* ─── Stepper-level tokens ───────────────────────────────────────── */
+.ds-stepper {
+  --marker-size:           24px;
+  --connector-width:       2px;
+  --connector-color:       var(--color-neutral-80);
+  --connector-color-active: var(--color-brand);
+}
+
+/* ─── Connector ──────────────────────────────────────────────────── */
+/* WA uses --connector-color / --connector-color-active for the
+   connector's background-color. A transition here catches the change
+   when a step gains or loses the `completed` attribute.             */
+.ds-stepper wa-step::part(connector) {
+  transition-property: background-color;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+/* ─── Marker: upcoming ───────────────────────────────────────────── */
+.ds-stepper wa-step::part(marker) {
+  background-color: var(--color-bg);
+  border:           1px solid var(--color-border);
+  color:            var(--color-text-subtle);
+  font-size:        var(--font-size-xs);
+  font-weight:      var(--font-weight-medium);
+}
+
+/* ─── Marker: active ─────────────────────────────────────────────── */
+.ds-stepper wa-step:state(active)::part(marker) {
+  background-color: var(--color-brand);
+  border-color:     var(--color-brand);
+  color:            white;
+}
+
+/* ─── Marker: completed ──────────────────────────────────────────── */
+.ds-stepper wa-step:state(completed)::part(marker) {
+  background-color: var(--color-brand);
+  border-color:     var(--color-brand);
+  color:            white;
+}
+
+/* ─── Labels ─────────────────────────────────────────────────────── */
+/* font-weight is NOT in transition-property: animating weight causes
+   a visible flicker before settling. Weight snaps; color fades.     */
+.ds-step__label {
+  font-size:              var(--font-size-sm);
+  color:                  var(--color-text-subtle);
+  font-weight:            var(--font-weight-regular);
+  transition-property:    color;
+  transition-duration:    var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+/* Invisible semibold ghost reserves the wider width so the label
+   row never shifts when the active step turns semibold.             */
+.ds-step__label::after {
+  content:        attr(data-label);
+  display:        block;
+  height:         0;
+  overflow:       hidden;
+  visibility:     hidden;
+  font-weight:    var(--font-weight-semibold);
+  pointer-events: none;
+  user-select:    none;
+}
+
+.ds-stepper wa-step:state(active) .ds-step__label {
+  color:       var(--color-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ─── Description ────────────────────────────────────────────────── */
+.ds-stepper wa-step::part(description) {
+  font-size: var(--font-size-xs);
+  color:     var(--color-text-subtle);
+}
+
+/* ─── Clickable: focus ring ──────────────────────────────────────── */
+/* Sets focus-ring tokens on the button part so WA reads them back
+   from the shadow DOM custom property cascade.                      */
+.ds-stepper wa-step::part(button) {
+  --wa-focus-ring:        2px solid var(--color-focus);
+  --wa-focus-ring-offset: 2px;
+}
+
+/* ─── Animation keyframes ────────────────────────────────────────── */
+@keyframes ds-marker-enter {
+  from { transform: scale(0.88); }
+  to   { transform: scale(1); }
+}
+
+@keyframes ds-checkmark-draw {
+  from { transform: scale(0.7); opacity: 0.2; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ─── Animation triggers (class-driven) ─────────────────────────── */
+/* Applied after the connector fill settles (~150ms after step change) */
+.ds-stepper wa-step.ds-step--entering::part(marker) {
+  animation: ds-marker-enter var(--duration-fast) var(--ease-spring);
+}
+
+.ds-stepper wa-step.ds-step--checking::part(marker) {
+  animation: ds-checkmark-draw var(--duration-fast) var(--ease-spring);
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────────── */
+/* The global :root override in motion.css zeros all --duration-*
+   tokens, which covers the connector transition above.
+   Keyframe animations need an explicit opt-out.                     */
+@media (prefers-reduced-motion: reduce) {
+  .ds-stepper wa-step::part(connector) {
+    transition: none;
+  }
+
+  .ds-stepper wa-step.ds-step--entering::part(marker),
+  .ds-stepper wa-step.ds-step--checking::part(marker) {
+    animation: none;
+  }
+}
