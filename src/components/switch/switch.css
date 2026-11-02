@@ -1,0 +1,53 @@
+/* ─── Size tokens (m default; s and l via attribute) ──────────────── */
+wa-switch {
+  --wa-form-control-background-color: var(--color-neutral-80);
+  --wa-focus-ring: none; /* replaced by box-shadow below */
+  --height: 20px;
+  --width: 36px;
+  --thumb-size: 16px;
+}
+
+wa-switch[size="s"] { --height: 16px; --width: 30px; --thumb-size: 12px; }
+wa-switch[size="l"] { --height: 24px; --width: 44px; --thumb-size: 20px; }
+
+/* ─── Track: remove WA's default border ──────────────────────────── */
+wa-switch::part(control) {
+  border: none;
+}
+
+/* ─── Thumb: always white + subtle lift shadow ────────────────────── */
+wa-switch::part(thumb) {
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* ─── Hover: darken track slightly (works for both off and on states) */
+wa-switch:not([disabled]):hover::part(control) {
+  filter: brightness(0.92);
+}
+
+/* ─── Focus-visible: 2px cobalt ring + 3px halo ──────────────────── */
+wa-switch:focus-within::part(control) {
+  box-shadow: 0 0 0 2px var(--color-focus), 0 0 0 5px var(--color-focus-halo);
+}
+
+/* ─── Label ───────────────────────────────────────────────────────── */
+wa-switch::part(label) {
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}
+
+/* ─── Hint ────────────────────────────────────────────────────────── */
+wa-switch::part(hint) {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-subtle);
+  margin-top: var(--space-1);
+}
+
+/* ─── Error ───────────────────────────────────────────────────────── */
+wa-switch[data-invalid]::part(label) { color: var(--color-error); }
+wa-switch[data-invalid]::part(hint)  { color: var(--color-error); }
+
+/* ─── Reduced motion ──────────────────────────────────────────────── */
+/* motion.css zeros --duration-fast → 0ms under prefers-reduced-motion,
+   which zeros --wa-transition-normal → thumb snaps, no slide. */
