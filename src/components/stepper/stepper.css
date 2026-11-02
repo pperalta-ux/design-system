@@ -84,8 +84,9 @@
 }
 
 /* ─── Animation keyframes ────────────────────────────────────────── */
+/* Spring: marker starts at 60% so the connector fill is visible first */
 @keyframes ds-marker-enter {
-  from { transform: scale(0.88); }
+  from { transform: scale(0.6); }
   to   { transform: scale(1); }
 }
 
@@ -94,10 +95,20 @@
   to   { transform: scale(1);   opacity: 1; }
 }
 
+/* Ring pulse: box-shadow expands from 0 → 9px while fading to transparent */
+@keyframes ds-ring-pulse {
+  from { box-shadow: 0 0 0 0   color-mix(in srgb, var(--color-brand) 45%, transparent); }
+  to   { box-shadow: 0 0 0 9px color-mix(in srgb, var(--color-brand) 0%,  transparent); }
+}
+
 /* ─── Animation triggers (class-driven) ─────────────────────────── */
-/* Applied after the connector fill settles (~150ms after step change) */
+/* ds-step--entering is added immediately after Lit updateComplete.
+   animation-delay handles timing: spring waits for connector fill
+   (~150ms = --duration-fast); ring lands as the spring overshoots. */
 .ds-stepper wa-step.ds-step--entering::part(marker) {
-  animation: ds-marker-enter var(--duration-fast) var(--ease-spring);
+  animation:
+    ds-marker-enter var(--duration-slow) var(--ease-spring) 160ms both,
+    ds-ring-pulse   520ms                var(--ease-out)    300ms both;
 }
 
 .ds-stepper wa-step.ds-step--checking::part(marker) {

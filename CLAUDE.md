@@ -32,7 +32,7 @@ It replicates the design-to-code workflow from my "Design to Code" case study, u
 7. ✅ Checkbox Group (select-all / indeterminate state)
 8. ✅ Switch
 9. ✅ Toggle (segmented control, built on radio group)
-10. Stepper (multi-step progress indicator — motion centerpiece)
+10. ✅ Stepper (multi-step progress indicator — motion centerpiece)
 11. Motion docs page
 12. Component status page (optional)
 

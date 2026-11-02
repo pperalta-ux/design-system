@@ -82,16 +82,18 @@ export class DsStepper extends LitElement {
     const fromEl  = steps[fromIdx];
     const toEl    = steps[fromIdx + 1];
 
-    // Advance step — Lit re-renders: fromEl gets `completed`, toEl gets :state(active).
-    // CSS connector transition fires automatically (~var(--duration-fast)).
+    // Advance — connector fill transition fires automatically (--duration-fast).
     this.activeIndex = fromIdx + 1;
     await this.updateComplete;
 
-    // Wait for connector to fill, then spring both changed markers simultaneously.
-    await this._delay(150);
+    // Force reflow so the animation restarts cleanly if the class is already present.
+    void (toEl as HTMLElement | undefined)?.offsetWidth;
+
+    // CSS handles timing: spring at 160ms delay, ring pulse at 300ms delay.
+    // Ring: 300ms delay + 520ms duration = 820ms total.
     toEl?.classList.add('ds-step--entering');
     fromEl?.classList.add('ds-step--checking');
-    await this._delay(150);
+    await this._delay(820);
 
     toEl?.classList.remove('ds-step--entering');
     fromEl?.classList.remove('ds-step--checking');
@@ -103,18 +105,12 @@ export class DsStepper extends LitElement {
     this._animating = true;
 
     const fromIdx = this.activeIndex;
-    const steps   = [...this.querySelectorAll('wa-step')];
-    const toEl    = steps[fromIdx - 1];
 
-    // Retreat — fromIdx-1 loses `completed`; CSS connector transitions back to neutral.
+    // Retreat — connector un-fills via its background-color transition; no spring or ring.
     this.activeIndex = fromIdx - 1;
     await this.updateComplete;
 
-    await this._delay(150);
-    toEl?.classList.add('ds-step--entering');
-    await this._delay(150);
-
-    toEl?.classList.remove('ds-step--entering');
+    await this._delay(200);
     this._animating = false;
   }
 
