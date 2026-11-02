@@ -67,7 +67,7 @@ export class DsToggle extends LitElement {
             >
               <span class="ds-toggle__option">
                 ${unsafeHTML(opt.icon)}
-                <span class="ds-toggle__label">${opt.label}</span>
+                <span class="ds-toggle__label" data-text=${opt.label}>${opt.label}</span>
               </span>
             </wa-radio>
           `)}

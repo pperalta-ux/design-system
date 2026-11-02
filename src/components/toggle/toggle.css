@@ -95,6 +95,25 @@
   white-space: nowrap;
 }
 
+/* ─── Reserved bold width ────────────────────────────────────────────
+   The label and its ::after (bold ghost) share the same grid cell.
+   The cell is sized by the wider of the two — always the ::after —
+   so the segment never resizes when font-weight transitions to 600.  */
+.ds-toggle__label {
+  display: inline-grid;
+}
+
+.ds-toggle__label::after {
+  content: attr(data-text);
+  font-weight: 600;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  grid-area: 1 / 1;
+  pointer-events: none;
+  user-select: none;
+}
+
 .ds-toggle__option svg {
   flex-shrink: 0;
   width: 16px;
