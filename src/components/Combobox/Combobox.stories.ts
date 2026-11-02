@@ -214,6 +214,14 @@ WithValue.play = async ({ canvasElement }) => {
     const selected = options().find(o => o.getAttribute('aria-selected') === 'true');
     expect(selected?.textContent?.trim()).toBe('Mango');
   });
+
+  // Screen reader wiring: the real input is a combobox pointing at the highlighted option
+  type AriaInput = HTMLInputElement & { ariaActiveDescendantElement: Element | null };
+  await expect(input).toHaveAttribute('role', 'combobox');
+  await expect(input).toHaveAttribute('aria-expanded', 'true');
+  await waitFor(() =>
+    expect((input as AriaInput).ariaActiveDescendantElement?.textContent?.trim()).toBe('Apple'),
+  );
   await userEvent.keyboard('{Tab}');
 };
 

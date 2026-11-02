@@ -154,6 +154,36 @@ export class DsCombobox extends LitElement {
 
   // ── Lit lifecycle ─────────────────────────────────────────────────────
 
+  /**
+   * The real <input> lives inside wa-input's shadow DOM, so ARIA set on the
+   * wa-input host never reaches screen readers. Put the combobox semantics on
+   * the inner input directly, using element references (which can point from
+   * the shadow DOM out to our light-DOM listbox and options).
+   */
+  private _syncInnerAria() {
+    type AriaInput = HTMLInputElement & {
+      ariaActiveDescendantElement: Element | null;
+      ariaControlsElements: Element[] | null;
+    };
+    const input = this.querySelector('wa-input')?.shadowRoot?.querySelector('input') as AriaInput | null;
+    if (!input) return;
+    input.setAttribute('role', 'combobox');
+    input.setAttribute('aria-autocomplete', 'list');
+    input.setAttribute('aria-expanded', this._open ? 'true' : 'false');
+    const list = this._listboxEl();
+    input.ariaControlsElements = list ? [list] : null;
+    input.ariaActiveDescendantElement = this._open && this._focusedIndex >= 0
+      ? this.querySelector('.ds-combobox__option.is-focused')
+      : null;
+  }
+
+  override async firstUpdated() {
+    await customElements.whenDefined('wa-input');
+    const field = this.querySelector('wa-input') as (HTMLElement & { updateComplete?: Promise<unknown> }) | null;
+    await field?.updateComplete;
+    this._syncInnerAria();
+  }
+
   override updated(changedProperties: Map<PropertyKey, unknown>) {
     // ResizeObserver for multi mode: reposition the menu when tags cause the field to grow
     if (this.multiple && !this._resizeObserver) {
@@ -189,6 +219,8 @@ export class DsCombobox extends LitElement {
       this.querySelector('.ds-combobox__option.is-focused')
         ?.scrollIntoView({ block: 'nearest' });
     }
+
+    this._syncInnerAria();
   }
 
   // ── Actions ───────────────────────────────────────────────────────────
@@ -355,10 +387,6 @@ export class DsCombobox extends LitElement {
           size=${this.size}
           ?disabled=${this.disabled}
           aria-invalid=${this.invalid || nothing}
-          aria-expanded=${this._open ? 'true' : 'false'}
-          aria-haspopup="listbox"
-          aria-controls=${listboxId}
-          aria-autocomplete="list"
           autocomplete="off"
           .value=${live(fieldVal)}
           @input=${this._onInput}
@@ -415,7 +443,7 @@ export class DsCombobox extends LitElement {
             id=${listboxId}
             class="ds-combobox__listbox"
             popover="manual"
-            tabindex="-1"
+            tabindex="0"
             role="listbox"
             aria-label=${this.label}
             aria-multiselectable=${this.multiple ? 'true' : nothing}
